@@ -2,10 +2,17 @@
 
 namespace SwigAndroidGuide
 {
-    class Multiply
+    class ActivityModel
     {
     public:
-        Multiply(int multiplier);
+
+        // Activity lifecycle
+
+        void onCreate();
+
+        // Math
+
+        void setMultiplier(int multiplier);
 
         int multiply(int a);
 

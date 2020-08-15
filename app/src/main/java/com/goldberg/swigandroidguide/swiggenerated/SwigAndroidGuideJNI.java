@@ -9,8 +9,10 @@
 package com.goldberg.swigandroidguide.swiggenerated;
 
 public class SwigAndroidGuideJNI {
-  public final static native long new_Multiply(int jarg1);
-  public final static native int Multiply_multiply__SWIG_0(long jarg1, Multiply jarg1_, int jarg2);
-  public final static native int Multiply_multiply__SWIG_1(int jarg1, int jarg2);
-  public final static native void delete_Multiply(long jarg1);
+  public final static native void ActivityModel_onCreate(long jarg1, ActivityModel jarg1_);
+  public final static native void ActivityModel_setMultiplier(long jarg1, ActivityModel jarg1_, int jarg2);
+  public final static native int ActivityModel_multiply__SWIG_0(long jarg1, ActivityModel jarg1_, int jarg2);
+  public final static native int ActivityModel_multiply__SWIG_1(int jarg1, int jarg2);
+  public final static native long new_ActivityModel();
+  public final static native void delete_ActivityModel(long jarg1);
 }

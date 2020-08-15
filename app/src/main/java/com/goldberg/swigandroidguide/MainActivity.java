@@ -6,11 +6,13 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.goldberg.swigandroidguide.swiggenerated.Multiply;
+import com.goldberg.swigandroidguide.swiggenerated.ActivityModel;
 
 public class MainActivity extends AppCompatActivity
 {
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private final ActivityModel activityModel = new ActivityModel();
 
     static
     {
@@ -29,14 +31,15 @@ public class MainActivity extends AppCompatActivity
 
         // SWIG Examples
 
-        simpleExample();
+        activityModel.onCreate();
+        mathExample();
     }
 
-    private void simpleExample()
+    private void mathExample()
     {
-        Log.d(TAG, "simpleExample() Multiply.multiply(5, 42): " + Multiply.multiply(5, 42));
-        Multiply multiply = new Multiply(3);
-        Log.d(TAG, "simpleExample() multiply.multiply(5): " + multiply.multiply(6));
+        Log.d(TAG, "mathExample() ActivityModel.multiply(5, 42): " + ActivityModel.multiply(5, 42));
+        activityModel.setMultiplier(3);
+        Log.d(TAG, "mathExample() activityModel.multiply(5): " + activityModel.multiply(6));
     }
 
     /**

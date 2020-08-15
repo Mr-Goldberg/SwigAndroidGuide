@@ -232,37 +232,47 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 #define SWIG_contract_assert(nullreturn, expr, msg) if (!(expr)) {SWIG_JavaThrowException(jenv, SWIG_JavaIllegalArgumentException, msg); return nullreturn; } else
 
 
-#include "Multiply.h"
+#include "ActivityModel.h"
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1Multiply(JNIEnv *jenv, jclass jcls, jint jarg1) {
-  jlong jresult = 0 ;
-  int arg1 ;
-  SwigAndroidGuide::Multiply *result = 0 ;
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ActivityModel_1onCreate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  SwigAndroidGuide::ActivityModel *arg1 = (SwigAndroidGuide::ActivityModel *) 0 ;
   
   (void)jenv;
   (void)jcls;
-  arg1 = (int)jarg1; 
-  result = (SwigAndroidGuide::Multiply *)new SwigAndroidGuide::Multiply(arg1);
-  *(SwigAndroidGuide::Multiply **)&jresult = result; 
-  return jresult;
+  (void)jarg1_;
+  arg1 = *(SwigAndroidGuide::ActivityModel **)&jarg1; 
+  (arg1)->onCreate();
 }
 
 
-SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Multiply_1multiply_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ActivityModel_1setMultiplier(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  SwigAndroidGuide::ActivityModel *arg1 = (SwigAndroidGuide::ActivityModel *) 0 ;
+  int arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(SwigAndroidGuide::ActivityModel **)&jarg1; 
+  arg2 = (int)jarg2; 
+  (arg1)->setMultiplier(arg2);
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ActivityModel_1multiply_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   jint jresult = 0 ;
-  SwigAndroidGuide::Multiply *arg1 = (SwigAndroidGuide::Multiply *) 0 ;
+  SwigAndroidGuide::ActivityModel *arg1 = (SwigAndroidGuide::ActivityModel *) 0 ;
   int arg2 ;
   int result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(SwigAndroidGuide::Multiply **)&jarg1; 
+  arg1 = *(SwigAndroidGuide::ActivityModel **)&jarg1; 
   arg2 = (int)jarg2; 
   result = (int)(arg1)->multiply(arg2);
   jresult = (jint)result; 
@@ -270,7 +280,7 @@ SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 }
 
 
-SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Multiply_1multiply_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jint jarg1, jint jarg2) {
+SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ActivityModel_1multiply_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jint jarg1, jint jarg2) {
   jint jresult = 0 ;
   int arg1 ;
   int arg2 ;
@@ -280,18 +290,30 @@ SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
   (void)jcls;
   arg1 = (int)jarg1; 
   arg2 = (int)jarg2; 
-  result = (int)SwigAndroidGuide::Multiply::multiply(arg1,arg2);
+  result = (int)SwigAndroidGuide::ActivityModel::multiply(arg1,arg2);
   jresult = (jint)result; 
   return jresult;
 }
 
 
-SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1Multiply(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  SwigAndroidGuide::Multiply *arg1 = (SwigAndroidGuide::Multiply *) 0 ;
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1ActivityModel(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  SwigAndroidGuide::ActivityModel *result = 0 ;
   
   (void)jenv;
   (void)jcls;
-  arg1 = *(SwigAndroidGuide::Multiply **)&jarg1; 
+  result = (SwigAndroidGuide::ActivityModel *)new SwigAndroidGuide::ActivityModel();
+  *(SwigAndroidGuide::ActivityModel **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1ActivityModel(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  SwigAndroidGuide::ActivityModel *arg1 = (SwigAndroidGuide::ActivityModel *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(SwigAndroidGuide::ActivityModel **)&jarg1; 
   delete arg1;
 }
 

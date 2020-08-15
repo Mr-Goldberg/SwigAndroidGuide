@@ -8,16 +8,16 @@
 
 package com.goldberg.swigandroidguide.swiggenerated;
 
-public class Multiply {
+public class ActivityModel {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 
-  protected Multiply(long cPtr, boolean cMemoryOwn) {
+  protected ActivityModel(long cPtr, boolean cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = cPtr;
   }
 
-  protected static long getCPtr(Multiply obj) {
+  protected static long getCPtr(ActivityModel obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 
@@ -30,22 +30,30 @@ public class Multiply {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        SwigAndroidGuideJNI.delete_Multiply(swigCPtr);
+        SwigAndroidGuideJNI.delete_ActivityModel(swigCPtr);
       }
       swigCPtr = 0;
     }
   }
 
-  public Multiply(int multiplier) {
-    this(SwigAndroidGuideJNI.new_Multiply(multiplier), true);
+  public void onCreate() {
+    SwigAndroidGuideJNI.ActivityModel_onCreate(swigCPtr, this);
+  }
+
+  public void setMultiplier(int multiplier) {
+    SwigAndroidGuideJNI.ActivityModel_setMultiplier(swigCPtr, this, multiplier);
   }
 
   public int multiply(int a) {
-    return SwigAndroidGuideJNI.Multiply_multiply__SWIG_0(swigCPtr, this, a);
+    return SwigAndroidGuideJNI.ActivityModel_multiply__SWIG_0(swigCPtr, this, a);
   }
 
   public static int multiply(int a, int b) {
-    return SwigAndroidGuideJNI.Multiply_multiply__SWIG_1(a, b);
+    return SwigAndroidGuideJNI.ActivityModel_multiply__SWIG_1(a, b);
+  }
+
+  public ActivityModel() {
+    this(SwigAndroidGuideJNI.new_ActivityModel(), true);
   }
 
 }

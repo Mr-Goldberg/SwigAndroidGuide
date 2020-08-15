@@ -6,9 +6,9 @@
 // Generated file is simple C++ file, so needed to include all required headers there too.
 
 %{
-#include "Multiply.h"
+#include "ActivityModel.h"
 %}
 
 // Process our C++ file (only the public section)
 
-%include "Multiply.h"
+%include "ActivityModel.h"
