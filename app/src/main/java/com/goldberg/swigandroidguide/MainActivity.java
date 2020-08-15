@@ -20,16 +20,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     private final ActivityModel activityModel = new ActivityModel();
-//    private final AndroidActivity androidActivity = new AndroidActivity();
-//
-//    private class AndroidActivity extends IAndroidActivity
-//    {
-//        @Override
-//        public void showToast(String text)
-//        {
-//            Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    private final AndroidActivity androidActivity = new AndroidActivity();
+
+    private class AndroidActivity extends IAndroidActivity
+    {
+        @Override
+        public void showToast(String text)
+        {
+            Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
 
         // SWIG Examples
 
-//        activityModel.onCreate(androidActivity);
+        activityModel.onCreate(androidActivity);
         mathExample();
     }
 

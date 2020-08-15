@@ -753,6 +753,10 @@ namespace Swig {
 #include <string>
 
 
+#include <memory>
+#include <string>
+
+
 #include "ActivityModel.h"
 #include "IAndroidActivity.h"
 
@@ -772,11 +776,11 @@ SwigDirector_IAndroidActivity::~SwigDirector_IAndroidActivity() {
 }
 
 
-void SwigDirector_IAndroidActivity::showToast(std::string value) {
+void SwigDirector_IAndroidActivity::showToast(std::shared_ptr< std::string > text) {
   JNIEnvWrapper swigjnienv(this) ;
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
-  jstring jvalue  ;
+  jstring jtext  ;
   
   if (!swig_override[0]) {
     SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method SwigAndroidGuide::IAndroidActivity::showToast.");
@@ -784,9 +788,17 @@ void SwigDirector_IAndroidActivity::showToast(std::string value) {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jvalue = jenv->NewStringUTF((&value)->c_str());
-    Swig::LocalRefGuard value_refguard(jenv, jvalue); 
-    jenv->CallStaticVoidMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[0], swigjobj, jvalue);
+    {
+      if (!text)
+      {
+        jtext = nullptr;
+      }
+      else
+      {
+        jtext = jenv->NewStringUTF((text)->c_str());
+      }
+    }
+    jenv->CallStaticVoidMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[0], swigjobj, jtext);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       Swig::DirectorException::raise(jenv, swigerror);
@@ -838,6 +850,28 @@ void SwigDirector_IAndroidActivity::swig_connect_director(JNIEnv *jenv, jobject 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1shared_1ptr_1to_1string(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  std::shared_ptr< std::string > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (std::shared_ptr< std::string > *)new std::shared_ptr< std::string >();
+  *(std::shared_ptr< std::string > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1shared_1ptr_1to_1string(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  std::shared_ptr< std::string > *arg1 = (std::shared_ptr< std::string > *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(std::shared_ptr< std::string > **)&jarg1; 
+  delete arg1;
+}
+
 
 SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ActivityModel_1onCreate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
   SwigAndroidGuide::ActivityModel *arg1 = (SwigAndroidGuide::ActivityModel *) 0 ;
@@ -933,20 +967,29 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 
 SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_IAndroidActivity_1showToast(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
   SwigAndroidGuide::IAndroidActivity *arg1 = (SwigAndroidGuide::IAndroidActivity *) 0 ;
-  std::string arg2 ;
+  std::shared_ptr< std::string > arg2 ;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
   arg1 = *(SwigAndroidGuide::IAndroidActivity **)&jarg1; 
-  if(!jarg2) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
-    return ;
-  } 
-  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
-  if (!arg2_pstr) return ;
-  (&arg2)->assign(arg2_pstr);
-  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+  {
+    //actual JNI call:
+    //const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
+    
+    const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
+    if (!psz_string)
+    {
+      arg2 = nullptr;
+    }
+    else
+    {
+      arg2 = std::make_shared<std::string>(psz_string);
+      
+      //psz_string needs to be released using jenv->ReleaseStringUTFChars(jarg2, psz_string);
+      jenv->ReleaseStringUTFChars(jarg2, psz_string);
+    }
+  }
   (arg1)->showToast(arg2);
 }
 

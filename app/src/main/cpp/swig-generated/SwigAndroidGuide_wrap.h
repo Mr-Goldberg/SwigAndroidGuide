@@ -17,7 +17,7 @@ public:
     void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
     SwigDirector_IAndroidActivity(JNIEnv *jenv);
     virtual ~SwigDirector_IAndroidActivity();
-    virtual void showToast(std::string value);
+    virtual void showToast(std::shared_ptr< std::string > text);
 public:
     bool swig_overrides(int n) {
       return (n < 1 ? swig_override[n] : false);

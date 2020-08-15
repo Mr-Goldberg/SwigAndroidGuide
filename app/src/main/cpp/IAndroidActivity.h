@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 namespace SwigAndroidGuide
 {
@@ -10,6 +11,6 @@ namespace SwigAndroidGuide
         // Required. Otherwise SWIG will issue warning.
         virtual ~IAndroidActivity() = default;
 
-        virtual void showToast(std::string value) = 0;
+        virtual void showToast(std::shared_ptr<std::string> text) = 0;
     };
 }

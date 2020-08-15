@@ -1,6 +1,8 @@
 #include "ActivityModel.h"
 #include "IAndroidActivity.h"
 
+using namespace std;
+
 namespace
 {
     const char *const TAG = "ActivityModel";
@@ -8,9 +10,9 @@ namespace
 
 namespace SwigAndroidGuide
 {
-    void ActivityModel::onCreate(IAndroidActivity* androidActivity)
+    void ActivityModel::onCreate(IAndroidActivity *androidActivity)
     {
-        androidActivity->showToast("Toast from C++");
+        androidActivity->showToast(make_shared<string>("Toast from C++"));
     }
 
     void ActivityModel::setMultiplier(int multiplier)

@@ -4,8 +4,9 @@
 
 // SWIG includes
 
-%include <swiginterface.i>
+%include <std_shared_ptr.i>
 %include <std_string.i>
+%include "std_shared_ptr_to_string.i"
 
 // %{...%} In included into generated *.cpp file literally, without processing.
 // Generated file is simple C++ file, so needed to include all required headers there too.
