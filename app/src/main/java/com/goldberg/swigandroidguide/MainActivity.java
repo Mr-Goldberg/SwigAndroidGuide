@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.goldberg.swigandroidguide.swiggenerated.ActivityModel;
 import com.goldberg.swigandroidguide.swiggenerated.IAndroidActivity;
+import com.goldberg.swigandroidguide.swiggenerated.Message;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -28,6 +31,14 @@ public class MainActivity extends AppCompatActivity
         public void showToast(String text)
         {
             Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void sendMessage(Message message)
+        {
+            Toast.makeText(MainActivity.this,
+                    String.format(Locale.US, "Message sent: '%d %s'", message.getId(), message.getText()),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -5,6 +5,8 @@
 
 namespace SwigAndroidGuide
 {
+    class Message;
+
     class IAndroidActivity
     {
     public:
@@ -12,5 +14,7 @@ namespace SwigAndroidGuide
         virtual ~IAndroidActivity() = default;
 
         virtual void showToast(std::shared_ptr<std::string> text) = 0;
+
+        virtual void sendMessage(std::shared_ptr<Message> message) = 0;
     };
 }

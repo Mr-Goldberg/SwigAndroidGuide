@@ -18,12 +18,13 @@ public:
     SwigDirector_IAndroidActivity(JNIEnv *jenv);
     virtual ~SwigDirector_IAndroidActivity();
     virtual void showToast(std::shared_ptr< std::string > text);
+    virtual void sendMessage(std::shared_ptr< SwigAndroidGuide::Message > message);
 public:
     bool swig_overrides(int n) {
-      return (n < 1 ? swig_override[n] : false);
+      return (n < 2 ? swig_override[n] : false);
     }
 protected:
-    Swig::BoolArray<1> swig_override;
+    Swig::BoolArray<2> swig_override;
 };
 
 

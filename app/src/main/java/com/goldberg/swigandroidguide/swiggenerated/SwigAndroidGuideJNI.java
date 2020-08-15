@@ -17,14 +17,24 @@ public class SwigAndroidGuideJNI {
   public final static native int ActivityModel_multiply__SWIG_1(int jarg1, int jarg2);
   public final static native long new_ActivityModel();
   public final static native void delete_ActivityModel(long jarg1);
+  public final static native long new_Message(int jarg1, java.lang.String jarg2);
+  public final static native int Message_getId(long jarg1, Message jarg1_);
+  public final static native void Message_setId(long jarg1, Message jarg1_, int jarg2);
+  public final static native java.lang.String Message_getText(long jarg1, Message jarg1_);
+  public final static native void Message_setText(long jarg1, Message jarg1_, java.lang.String jarg2);
+  public final static native void delete_Message(long jarg1);
   public final static native void delete_IAndroidActivity(long jarg1);
   public final static native void IAndroidActivity_showToast(long jarg1, IAndroidActivity jarg1_, java.lang.String jarg2);
+  public final static native void IAndroidActivity_sendMessage(long jarg1, IAndroidActivity jarg1_, long jarg2, Message jarg2_);
   public final static native long new_IAndroidActivity();
   public final static native void IAndroidActivity_director_connect(IAndroidActivity obj, long cptr, boolean mem_own, boolean weak_global);
   public final static native void IAndroidActivity_change_ownership(IAndroidActivity obj, long cptr, boolean take_or_release);
 
   public static void SwigDirector_IAndroidActivity_showToast(IAndroidActivity jself, java.lang.String text) {
     jself.showToast(text);
+  }
+  public static void SwigDirector_IAndroidActivity_sendMessage(IAndroidActivity jself, long message) {
+    jself.sendMessage((message == 0) ? null : new Message(message, true));
   }
 
   private final static native void swig_module_init();

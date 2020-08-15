@@ -55,6 +55,10 @@ public class IAndroidActivity {
     SwigAndroidGuideJNI.IAndroidActivity_showToast(swigCPtr, this, text);
   }
 
+  public void sendMessage(Message message) {
+    SwigAndroidGuideJNI.IAndroidActivity_sendMessage(swigCPtr, this, Message.getCPtr(message), message);
+  }
+
   public IAndroidActivity() {
     this(SwigAndroidGuideJNI.new_IAndroidActivity(), true);
     SwigAndroidGuideJNI.IAndroidActivity_director_connect(this, swigCPtr, true, true);

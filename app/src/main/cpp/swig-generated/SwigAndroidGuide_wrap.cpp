@@ -746,7 +746,7 @@ namespace Swig {
 namespace Swig {
   namespace {
     jclass jclass_SwigAndroidGuideJNI = NULL;
-    jmethodID director_method_ids[1];
+    jmethodID director_method_ids[2];
   }
 }
 
@@ -758,7 +758,18 @@ namespace Swig {
 
 
 #include "ActivityModel.h"
+#include "Message.h"
 #include "IAndroidActivity.h"
+
+
+struct SWIG_null_deleter {
+  void operator() (void const *) const {
+  }
+};
+#define SWIG_NO_NULL_DELETER_0 , SWIG_null_deleter()
+#define SWIG_NO_NULL_DELETER_1
+#define SWIG_NO_NULL_DELETER_SWIG_POINTER_NEW
+#define SWIG_NO_NULL_DELETER_SWIG_POINTER_OWN
 
 
 
@@ -810,6 +821,34 @@ void SwigDirector_IAndroidActivity::showToast(std::shared_ptr< std::string > tex
   if (swigjobj) jenv->DeleteLocalRef(swigjobj);
 }
 
+void SwigDirector_IAndroidActivity::sendMessage(std::shared_ptr< SwigAndroidGuide::Message > message) {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  jlong jmessage  ;
+  
+  if (!swig_override[1]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method SwigAndroidGuide::IAndroidActivity::sendMessage.");
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jmessage = 0;
+    if (message) {
+      *((std::shared_ptr<  SwigAndroidGuide::Message > **)&jmessage) = new std::shared_ptr<  SwigAndroidGuide::Message >(message);
+    } 
+    jenv->CallStaticVoidMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[1], swigjobj, jmessage);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      Swig::DirectorException::raise(jenv, swigerror);
+    }
+    
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in SwigAndroidGuide::IAndroidActivity::sendMessage ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
 void SwigDirector_IAndroidActivity::swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global) {
   static struct {
     const char *mname;
@@ -818,6 +857,9 @@ void SwigDirector_IAndroidActivity::swig_connect_director(JNIEnv *jenv, jobject 
   } methods[] = {
     {
       "showToast", "(Ljava/lang/String;)V", NULL 
+    },
+    {
+      "sendMessage", "(Lcom/goldberg/swigandroidguide/swiggenerated/Message;)V", NULL 
     }
   };
   
@@ -830,7 +872,7 @@ void SwigDirector_IAndroidActivity::swig_connect_director(JNIEnv *jenv, jobject 
       baseclass = (jclass) jenv->NewGlobalRef(baseclass);
     }
     bool derived = (jenv->IsSameObject(baseclass, jcls) ? false : true);
-    for (int i = 0; i < 1; ++i) {
+    for (int i = 0; i < 2; ++i) {
       if (!methods[i].base_methid) {
         methods[i].base_methid = jenv->GetMethodID(baseclass, methods[i].mname, methods[i].mdesc);
         if (!methods[i].base_methid) return;
@@ -955,6 +997,147 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 }
 
 
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1Message(JNIEnv *jenv, jclass jcls, jint jarg1, jstring jarg2) {
+  jlong jresult = 0 ;
+  int arg1 ;
+  std::shared_ptr< std::string > arg2 ;
+  SwigAndroidGuide::Message *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = (int)jarg1; 
+  {
+    //actual JNI call:
+    //const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
+    
+    const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
+    if (!psz_string)
+    {
+      arg2 = nullptr;
+    }
+    else
+    {
+      arg2 = std::make_shared<std::string>(psz_string);
+      
+      //psz_string needs to be released using jenv->ReleaseStringUTFChars(jarg2, psz_string);
+      jenv->ReleaseStringUTFChars(jarg2, psz_string);
+    }
+  }
+  result = (SwigAndroidGuide::Message *)new SwigAndroidGuide::Message(arg1,arg2);
+  
+  *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jresult = result ? new std::shared_ptr<  SwigAndroidGuide::Message >(result SWIG_NO_NULL_DELETER_1) : 0;
+  
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1getId(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (int)(arg1)->getId();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1setId(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  int arg2 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (int)jarg2; 
+  (arg1)->setId(arg2);
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1getText(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+  std::shared_ptr< std::string > result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (arg1)->getText();
+  {
+    if (!result)
+    {
+      return nullptr;
+    }
+    
+    //actual JNI call:
+    //return jenv->NewStringUTF((result)->c_str());
+    
+    return jenv->NewStringUTF((result)->c_str());
+  }
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1setText(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  std::shared_ptr< std::string > arg2 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  {
+    //actual JNI call:
+    //const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
+    
+    const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
+    if (!psz_string)
+    {
+      arg2 = nullptr;
+    }
+    else
+    {
+      arg2 = std::make_shared<std::string>(psz_string);
+      
+      //psz_string needs to be released using jenv->ReleaseStringUTFChars(jarg2, psz_string);
+      jenv->ReleaseStringUTFChars(jarg2, psz_string);
+    }
+  }
+  (arg1)->setText(arg2);
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1Message(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  (void)arg1; delete smartarg1;
+}
+
+
 SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1IAndroidActivity(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   SwigAndroidGuide::IAndroidActivity *arg1 = (SwigAndroidGuide::IAndroidActivity *) 0 ;
   
@@ -994,6 +1177,22 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 }
 
 
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_IAndroidActivity_1sendMessage(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  SwigAndroidGuide::IAndroidActivity *arg1 = (SwigAndroidGuide::IAndroidActivity *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::Message > arg2 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *argp2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(SwigAndroidGuide::IAndroidActivity **)&jarg1; 
+  argp2 = *(std::shared_ptr< SwigAndroidGuide::Message > **)&jarg2;
+  if (argp2) arg2 = *argp2; 
+  (arg1)->sendMessage(arg2);
+}
+
+
 SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1IAndroidActivity(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   SwigAndroidGuide::IAndroidActivity *result = 0 ;
@@ -1030,9 +1229,12 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
   static struct {
     const char *method;
     const char *signature;
-  } methods[1] = {
+  } methods[2] = {
     {
       "SwigDirector_IAndroidActivity_showToast", "(Lcom/goldberg/swigandroidguide/swiggenerated/IAndroidActivity;Ljava/lang/String;)V" 
+    },
+    {
+      "SwigDirector_IAndroidActivity_sendMessage", "(Lcom/goldberg/swigandroidguide/swiggenerated/IAndroidActivity;J)V" 
     }
   };
   Swig::jclass_SwigAndroidGuideJNI = (jclass) jenv->NewGlobalRef(jcls);

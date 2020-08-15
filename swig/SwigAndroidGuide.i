@@ -13,12 +13,16 @@
 
 %{
 #include "ActivityModel.h"
+#include "Message.h"
 #include "IAndroidActivity.h"
 %}
 
 // Process our C++ file (only the public section)
 
 %include "ActivityModel.h"
-	
+
+%shared_ptr(SwigAndroidGuide::Message);
+%include "Message.h"
+
 %feature("director") IAndroidActivity;
 %include "IAndroidActivity.h"
