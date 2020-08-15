@@ -2,13 +2,15 @@
 
 namespace SwigAndroidGuide
 {
+    class IAndroidActivity;
+
     class ActivityModel
     {
     public:
 
         // Activity lifecycle
 
-        void onCreate();
+        void onCreate(IAndroidActivity* androidActivity);
 
         // Math
 

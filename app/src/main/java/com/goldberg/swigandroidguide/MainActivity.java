@@ -3,21 +3,33 @@ package com.goldberg.swigandroidguide;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.goldberg.swigandroidguide.swiggenerated.ActivityModel;
+import com.goldberg.swigandroidguide.swiggenerated.IAndroidActivity;
 
 public class MainActivity extends AppCompatActivity
 {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private final ActivityModel activityModel = new ActivityModel();
-
     static
     {
         System.loadLibrary("native-lib");
     }
+
+    private final ActivityModel activityModel = new ActivityModel();
+//    private final AndroidActivity androidActivity = new AndroidActivity();
+//
+//    private class AndroidActivity extends IAndroidActivity
+//    {
+//        @Override
+//        public void showToast(String text)
+//        {
+//            Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,7 +43,7 @@ public class MainActivity extends AppCompatActivity
 
         // SWIG Examples
 
-        activityModel.onCreate();
+//        activityModel.onCreate(androidActivity);
         mathExample();
     }
 

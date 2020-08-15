@@ -1,5 +1,5 @@
 #include "ActivityModel.h"
-#include <android/log.h>
+#include "IAndroidActivity.h"
 
 namespace
 {
@@ -8,9 +8,9 @@ namespace
 
 namespace SwigAndroidGuide
 {
-    void ActivityModel::onCreate()
+    void ActivityModel::onCreate(IAndroidActivity* androidActivity)
     {
-        __android_log_print(ANDROID_LOG_DEBUG, TAG, "ActivityModel::onCreate()");
+        androidActivity->showToast("Toast from C++");
     }
 
     void ActivityModel::setMultiplier(int multiplier)

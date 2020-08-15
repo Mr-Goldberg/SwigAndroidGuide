@@ -8,16 +8,16 @@
 
 package com.goldberg.swigandroidguide.swiggenerated;
 
-public class ActivityModel {
+public class IAndroidActivity {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 
-  protected ActivityModel(long cPtr, boolean cMemoryOwn) {
+  protected IAndroidActivity(long cPtr, boolean cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = cPtr;
   }
 
-  protected static long getCPtr(ActivityModel obj) {
+  protected static long getCPtr(IAndroidActivity obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 
@@ -30,30 +30,34 @@ public class ActivityModel {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        SwigAndroidGuideJNI.delete_ActivityModel(swigCPtr);
+        SwigAndroidGuideJNI.delete_IAndroidActivity(swigCPtr);
       }
       swigCPtr = 0;
     }
   }
 
-  public void onCreate(IAndroidActivity androidActivity) {
-    SwigAndroidGuideJNI.ActivityModel_onCreate(swigCPtr, this, IAndroidActivity.getCPtr(androidActivity), androidActivity);
+  protected void swigDirectorDisconnect() {
+    swigCMemOwn = false;
+    delete();
   }
 
-  public void setMultiplier(int multiplier) {
-    SwigAndroidGuideJNI.ActivityModel_setMultiplier(swigCPtr, this, multiplier);
+  public void swigReleaseOwnership() {
+    swigCMemOwn = false;
+    SwigAndroidGuideJNI.IAndroidActivity_change_ownership(this, swigCPtr, false);
   }
 
-  public int multiply(int a) {
-    return SwigAndroidGuideJNI.ActivityModel_multiply__SWIG_0(swigCPtr, this, a);
+  public void swigTakeOwnership() {
+    swigCMemOwn = true;
+    SwigAndroidGuideJNI.IAndroidActivity_change_ownership(this, swigCPtr, true);
   }
 
-  public static int multiply(int a, int b) {
-    return SwigAndroidGuideJNI.ActivityModel_multiply__SWIG_1(a, b);
+  public void showToast(String value) {
+    SwigAndroidGuideJNI.IAndroidActivity_showToast(swigCPtr, this, value);
   }
 
-  public ActivityModel() {
-    this(SwigAndroidGuideJNI.new_ActivityModel(), true);
+  public IAndroidActivity() {
+    this(SwigAndroidGuideJNI.new_IAndroidActivity(), true);
+    SwigAndroidGuideJNI.IAndroidActivity_director_connect(this, swigCPtr, true, true);
   }
 
 }
