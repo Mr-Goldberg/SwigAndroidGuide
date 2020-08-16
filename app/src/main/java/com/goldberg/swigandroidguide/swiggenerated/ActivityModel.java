@@ -52,6 +52,10 @@ public class ActivityModel {
     return SwigAndroidGuideJNI.ActivityModel_multiply__SWIG_1(a, b);
   }
 
+  public int decryptMessages(byte[][] messages) {
+    return SwigAndroidGuideJNI.ActivityModel_decryptMessages(swigCPtr, this, messages);
+  }
+
   public ActivityModel() {
     this(SwigAndroidGuideJNI.new_ActivityModel(), true);
   }

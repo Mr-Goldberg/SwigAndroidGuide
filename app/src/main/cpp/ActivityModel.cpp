@@ -31,4 +31,15 @@ namespace SwigAndroidGuide
     {
         return a * b;
     }
+
+    int ActivityModel::decryptMessages(shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes messages)
+    {
+        int bytesDecrypted = 0;
+        for (int i = 0; i < messages->size(); ++i)
+        {
+            bytesDecrypted += messages->at(i)->size();
+        }
+
+        return bytesDecrypted;
+    }
 }

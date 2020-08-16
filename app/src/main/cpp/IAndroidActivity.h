@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include "Types.h"
 
 namespace SwigAndroidGuide
 {

@@ -757,6 +757,112 @@ namespace Swig {
 #include <string>
 
 
+#include <typeinfo>
+#include <stdexcept>
+
+
+#include <vector>
+#include <stdexcept>
+
+
+#include "Types.h"
+
+namespace
+{
+	/*
+	 * C++ type 'std::shared_ptr<std::vector<std::shared_ptr<std::vector<unsigned char>>>>' with alias 'shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes'
+	 * is equivalent to Java type 'byte[][]',
+	 * which is equivalent to JNI type: 'jobjectArray' with 'jbyteArray' elements.
+	 * JNI descriptors are 'jobjectArray' = '[[B' (treat as byte[][]), 'jbyteArray' = '[B'.
+	 * Note: more logical will be to pass two-dimensional array, but JNI does support only 1-dimentional arrays.
+	 */
+
+	shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes convertArrayOfArraysOfByteFromJavaToCpp(JNIEnv *jenv, jobjectArray javaArrayOfArraysOfBytes)
+	{
+		if(javaArrayOfArraysOfBytes == nullptr) return nullptr;
+		
+		// Create outer vector
+		
+		jsize sizeOfArrayOfArrays = jenv->GetArrayLength(javaArrayOfArraysOfBytes);
+		std::shared_ptr<std::vector<shared_ptr_to_vector_of_bytes>> vectorOfVectorsOfBytes = std::make_shared<std::vector<shared_ptr_to_vector_of_bytes>>();
+		vectorOfVectorsOfBytes->reserve((size_t) sizeOfArrayOfArrays);
+		
+		// Push all inner vectors into outer vector
+		
+		for(jsize i = 0; i < sizeOfArrayOfArrays; ++i)
+		{
+			// Null array
+			
+			jbyteArray arrayOfBytes = (jbyteArray) (jenv->GetObjectArrayElement(javaArrayOfArraysOfBytes, i));
+			if (arrayOfBytes == nullptr)
+			{
+				vectorOfVectorsOfBytes->push_back(nullptr);
+				continue;
+			}
+
+			// Empty array
+
+			jsize sizeOfBuffer = jenv->GetArrayLength(arrayOfBytes);
+			if(sizeOfBuffer == 0)
+			{
+				vectorOfVectorsOfBytes->push_back(std::make_shared<vector_of_bytes>());
+				continue;
+			}
+
+			// Array with elements
+
+			jbyte *bufferOfBytes = jenv->GetByteArrayElements(arrayOfBytes, nullptr);
+			shared_ptr_to_vector_of_bytes vector = std::make_shared<vector_of_bytes>(bufferOfBytes, bufferOfBytes + sizeOfBuffer);
+			vectorOfVectorsOfBytes->push_back(vector);
+			jenv->ReleaseByteArrayElements(arrayOfBytes, bufferOfBytes, 0);
+		}
+
+		return vectorOfVectorsOfBytes;
+	}
+	
+	jobjectArray convertArrayOfArraysOfByteFromCppToJava(JNIEnv *jenv, shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes vectorOfVectorsOfBytes)
+	{
+		if (!vectorOfVectorsOfBytes) return nullptr;
+
+		// Allocate array of objects, where each object is 'jbyteArray'
+
+		jsize sizeOfArrayOfArrays = (jsize) vectorOfVectorsOfBytes->size();
+		jclass classOfJByteArray = jenv->FindClass("[B"); // '[B' is the JNI field descriptor for the Java byte[] type
+		jobjectArray arrayOfArraysOfBytes = jenv->NewObjectArray(sizeOfArrayOfArrays, classOfJByteArray, nullptr);
+
+		// Set inner arrays to it
+
+		for(jsize i = 0; i < sizeOfArrayOfArrays; ++i)
+		{
+			// Null array
+			
+			shared_ptr_to_vector_of_bytes vectorOfBytes = vectorOfVectorsOfBytes->at(i);
+			if (!vectorOfBytes)
+			{
+				continue;
+			}
+			
+			// Empty array
+			
+			jsize sizeOfArray = (jsize) vectorOfBytes->size();
+			jbyteArray javaArrayOfBytes = jenv->NewByteArray(sizeOfArray);
+			jenv->SetObjectArrayElement(arrayOfArraysOfBytes, (jsize) i, javaArrayOfBytes);
+			if (sizeOfArray == 0)
+			{
+				continue;
+			}
+			
+			// Array with elements
+			
+			jenv->SetByteArrayRegion(javaArrayOfBytes, 0, sizeOfArray, (jbyte *) &(vectorOfBytes->at(0)));
+		}
+
+		return arrayOfArraysOfBytes;
+	}
+}
+
+
+#include "Types.h"
 #include "ActivityModel.h"
 #include "Message.h"
 #include "IAndroidActivity.h"
@@ -915,6 +1021,28 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 }
 
 
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1shared_1ptr_1to_1vector_1of_1shared_1ptr_1to_1vector_1of_1bytes(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  std::shared_ptr< std::vector< std::shared_ptr< std::vector< unsigned char > > > > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (std::shared_ptr< std::vector< std::shared_ptr< std::vector< unsigned char > > > > *)new std::shared_ptr< std::vector< std::shared_ptr< std::vector< unsigned char > > > >();
+  *(std::shared_ptr< std::vector< std::shared_ptr< std::vector< unsigned char > > > > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1shared_1ptr_1to_1vector_1of_1shared_1ptr_1to_1vector_1of_1bytes(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  std::shared_ptr< std::vector< std::shared_ptr< std::vector< unsigned char > > > > *arg1 = (std::shared_ptr< std::vector< std::shared_ptr< std::vector< unsigned char > > > > *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(std::shared_ptr< std::vector< std::shared_ptr< std::vector< unsigned char > > > > **)&jarg1; 
+  delete arg1;
+}
+
+
 SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ActivityModel_1onCreate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
   SwigAndroidGuide::ActivityModel *arg1 = (SwigAndroidGuide::ActivityModel *) 0 ;
   SwigAndroidGuide::IAndroidActivity *arg2 = (SwigAndroidGuide::IAndroidActivity *) 0 ;
@@ -970,6 +1098,25 @@ SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
   arg1 = (int)jarg1; 
   arg2 = (int)jarg2; 
   result = (int)SwigAndroidGuide::ActivityModel::multiply(arg1,arg2);
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ActivityModel_1decryptMessages(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jobjectArray jarg2) {
+  jint jresult = 0 ;
+  SwigAndroidGuide::ActivityModel *arg1 = (SwigAndroidGuide::ActivityModel *) 0 ;
+  shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes arg2 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(SwigAndroidGuide::ActivityModel **)&jarg1; 
+  {
+    arg2 = convertArrayOfArraysOfByteFromJavaToCpp(jenv, jarg2);
+  }
+  result = (int)(arg1)->decryptMessages(arg2);
   jresult = (jint)result; 
   return jresult;
 }

@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity
 
         activityModel.onCreate(androidActivity);
         mathExample();
+        decrypt();
     }
 
     private void mathExample()
@@ -63,6 +64,18 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "mathExample() ActivityModel.multiply(5, 42): " + ActivityModel.multiply(5, 42));
         activityModel.setMultiplier(3);
         Log.d(TAG, "mathExample() activityModel.multiply(5): " + activityModel.multiply(6));
+    }
+
+    private void decrypt()
+    {
+        byte[][] messages = new byte[5][];
+        for (int i = 0; i < messages.length; ++i)
+        {
+            messages[i] = new byte[(i + 1) * 385];
+        }
+
+        int result = activityModel.decryptMessages(messages);
+        Log.d(TAG, "decrypt() Message bytes decrypted: " + result);
     }
 
     /**

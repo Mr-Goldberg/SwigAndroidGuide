@@ -11,10 +11,13 @@ package com.goldberg.swigandroidguide.swiggenerated;
 public class SwigAndroidGuideJNI {
   public final static native long new_shared_ptr_to_string();
   public final static native void delete_shared_ptr_to_string(long jarg1);
+  public final static native long new_shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes();
+  public final static native void delete_shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes(long jarg1);
   public final static native void ActivityModel_onCreate(long jarg1, ActivityModel jarg1_, long jarg2, IAndroidActivity jarg2_);
   public final static native void ActivityModel_setMultiplier(long jarg1, ActivityModel jarg1_, int jarg2);
   public final static native int ActivityModel_multiply__SWIG_0(long jarg1, ActivityModel jarg1_, int jarg2);
   public final static native int ActivityModel_multiply__SWIG_1(int jarg1, int jarg2);
+  public final static native int ActivityModel_decryptMessages(long jarg1, ActivityModel jarg1_, byte[][] jarg2);
   public final static native long new_ActivityModel();
   public final static native void delete_ActivityModel(long jarg1);
   public final static native long new_Message(int jarg1, java.lang.String jarg2);
