@@ -746,11 +746,19 @@ namespace Swig {
 namespace Swig {
   namespace {
     jclass jclass_SwigAndroidGuideJNI = NULL;
-    jmethodID director_method_ids[2];
+    jmethodID director_method_ids[7];
   }
 }
 
 #include <string>
+
+
+  #include <functional>
+  #include <iostream>
+
+  #ifndef SWIG_DIRECTORS
+  #error "Directors must be enabled in your SWIG module for std_function.i to work correctly"
+  #endif
 
 
 #include <memory>
@@ -862,10 +870,22 @@ namespace
 }
 
 
+  struct FunctorVoidImpl {
+    virtual ~FunctorVoidImpl() {}
+    virtual void call() = 0;
+  };
+
+SWIGINTERN std::function< void () > *new_std_function_Sl_void_Sp__SP__Sg___SWIG_2(FunctorVoidImpl *in){
+        return new std::function<void()>([=]{
+          return in->call();
+        });
+      }
+
 #include "Types.h"
 #include "ActivityModel.h"
 #include "Message.h"
 #include "IAndroidActivity.h"
+#include "ITaskScheduler.h"
 
 
 struct SWIG_null_deleter {
@@ -884,6 +904,73 @@ struct SWIG_null_deleter {
  * --------------------------------------------------- */
 
 #include "SwigAndroidGuide_wrap.h"
+
+SwigDirector_FunctorVoidImpl::SwigDirector_FunctorVoidImpl(JNIEnv *jenv) : FunctorVoidImpl(), Swig::Director(jenv) {
+}
+
+SwigDirector_FunctorVoidImpl::~SwigDirector_FunctorVoidImpl() {
+  swig_disconnect_director_self("swigDirectorDisconnect");
+}
+
+
+void SwigDirector_FunctorVoidImpl::call() {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[0]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method FunctorVoidImpl::call.");
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jenv->CallStaticVoidMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[0], swigjobj);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      Swig::DirectorException::raise(jenv, swigerror);
+    }
+    
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in FunctorVoidImpl::call ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+void SwigDirector_FunctorVoidImpl::swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global) {
+  static struct {
+    const char *mname;
+    const char *mdesc;
+    jmethodID base_methid;
+  } methods[] = {
+    {
+      "call", "()V", NULL 
+    }
+  };
+  
+  static jclass baseclass = 0 ;
+  
+  if (swig_set_self(jenv, jself, swig_mem_own, weak_global)) {
+    if (!baseclass) {
+      baseclass = jenv->FindClass("com/goldberg/swigandroidguide/swiggenerated/FunctorVoidImpl");
+      if (!baseclass) return;
+      baseclass = (jclass) jenv->NewGlobalRef(baseclass);
+    }
+    bool derived = (jenv->IsSameObject(baseclass, jcls) ? false : true);
+    for (int i = 0; i < 1; ++i) {
+      if (!methods[i].base_methid) {
+        methods[i].base_methid = jenv->GetMethodID(baseclass, methods[i].mname, methods[i].mdesc);
+        if (!methods[i].base_methid) return;
+      }
+      swig_override[i] = false;
+      if (derived) {
+        jmethodID methid = jenv->GetMethodID(jcls, methods[i].mname, methods[i].mdesc);
+        swig_override[i] = (methid != methods[i].base_methid);
+        jenv->ExceptionClear();
+      }
+    }
+  }
+}
+
 
 SwigDirector_IAndroidActivity::SwigDirector_IAndroidActivity(JNIEnv *jenv) : SwigAndroidGuide::IAndroidActivity(), Swig::Director(jenv) {
 }
@@ -915,7 +1002,7 @@ void SwigDirector_IAndroidActivity::showToast(std::shared_ptr< std::string > tex
         jtext = jenv->NewStringUTF((text)->c_str());
       }
     }
-    jenv->CallStaticVoidMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[0], swigjobj, jtext);
+    jenv->CallStaticVoidMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[1], swigjobj, jtext);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       Swig::DirectorException::raise(jenv, swigerror);
@@ -943,7 +1030,7 @@ void SwigDirector_IAndroidActivity::sendMessage(std::shared_ptr< SwigAndroidGuid
     if (message) {
       *((std::shared_ptr<  SwigAndroidGuide::Message > **)&jmessage) = new std::shared_ptr<  SwigAndroidGuide::Message >(message);
     } 
-    jenv->CallStaticVoidMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[1], swigjobj, jmessage);
+    jenv->CallStaticVoidMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[2], swigjobj, jmessage);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
       Swig::DirectorException::raise(jenv, swigerror);
@@ -953,6 +1040,33 @@ void SwigDirector_IAndroidActivity::sendMessage(std::shared_ptr< SwigAndroidGuid
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in SwigAndroidGuide::IAndroidActivity::sendMessage ");
   }
   if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+SwigAndroidGuide::ITaskScheduler *SwigDirector_IAndroidActivity::getTaskScheduler() {
+  SwigAndroidGuide::ITaskScheduler *c_result = 0 ;
+  jlong jresult = 0 ;
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[2]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method SwigAndroidGuide::IAndroidActivity::getTaskScheduler.");
+    return c_result;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[3], swigjobj);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      Swig::DirectorException::raise(jenv, swigerror);
+    }
+    
+    c_result = *(SwigAndroidGuide::ITaskScheduler **)&jresult; 
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in SwigAndroidGuide::IAndroidActivity::getTaskScheduler ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+  return c_result;
 }
 
 void SwigDirector_IAndroidActivity::swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global) {
@@ -966,6 +1080,9 @@ void SwigDirector_IAndroidActivity::swig_connect_director(JNIEnv *jenv, jobject 
     },
     {
       "sendMessage", "(Lcom/goldberg/swigandroidguide/swiggenerated/Message;)V", NULL 
+    },
+    {
+      "getTaskScheduler", "()Lcom/goldberg/swigandroidguide/swiggenerated/ITaskScheduler;", NULL 
     }
   };
   
@@ -978,7 +1095,136 @@ void SwigDirector_IAndroidActivity::swig_connect_director(JNIEnv *jenv, jobject 
       baseclass = (jclass) jenv->NewGlobalRef(baseclass);
     }
     bool derived = (jenv->IsSameObject(baseclass, jcls) ? false : true);
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 3; ++i) {
+      if (!methods[i].base_methid) {
+        methods[i].base_methid = jenv->GetMethodID(baseclass, methods[i].mname, methods[i].mdesc);
+        if (!methods[i].base_methid) return;
+      }
+      swig_override[i] = false;
+      if (derived) {
+        jmethodID methid = jenv->GetMethodID(jcls, methods[i].mname, methods[i].mdesc);
+        swig_override[i] = (methid != methods[i].base_methid);
+        jenv->ExceptionClear();
+      }
+    }
+  }
+}
+
+
+SwigDirector_ITaskScheduler::SwigDirector_ITaskScheduler(JNIEnv *jenv) : SwigAndroidGuide::ITaskScheduler(), Swig::Director(jenv) {
+}
+
+SwigDirector_ITaskScheduler::~SwigDirector_ITaskScheduler() {
+  swig_disconnect_director_self("swigDirectorDisconnect");
+}
+
+
+bool SwigDirector_ITaskScheduler::isMainThread() {
+  bool c_result = SwigValueInit< bool >() ;
+  jboolean jresult = 0 ;
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  
+  if (!swig_override[0]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method SwigAndroidGuide::ITaskScheduler::isMainThread.");
+    return c_result;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[4], swigjobj);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      Swig::DirectorException::raise(jenv, swigerror);
+    }
+    
+    c_result = jresult ? true : false; 
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in SwigAndroidGuide::ITaskScheduler::isMainThread ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+  return c_result;
+}
+
+void SwigDirector_ITaskScheduler::executeOnBackgroundThread(std::function< void () > function) {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  jlong jfunction  ;
+  
+  if (!swig_override[1]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method SwigAndroidGuide::ITaskScheduler::executeOnBackgroundThread.");
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jfunction = 0;
+    *((std::function< void () > **)&jfunction) = new std::function< void () >((const std::function< void () > &)function); 
+    jenv->CallStaticVoidMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[5], swigjobj, jfunction);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      Swig::DirectorException::raise(jenv, swigerror);
+    }
+    
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in SwigAndroidGuide::ITaskScheduler::executeOnBackgroundThread ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+void SwigDirector_ITaskScheduler::executeOnUIThread(std::function< void () > function) {
+  JNIEnvWrapper swigjnienv(this) ;
+  JNIEnv * jenv = swigjnienv.getJNIEnv() ;
+  jobject swigjobj = (jobject) NULL ;
+  jlong jfunction  ;
+  
+  if (!swig_override[2]) {
+    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method SwigAndroidGuide::ITaskScheduler::executeOnUIThread.");
+    return;
+  }
+  swigjobj = swig_get_self(jenv);
+  if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
+    jfunction = 0;
+    *((std::function< void () > **)&jfunction) = new std::function< void () >((const std::function< void () > &)function); 
+    jenv->CallStaticVoidMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[6], swigjobj, jfunction);
+    jthrowable swigerror = jenv->ExceptionOccurred();
+    if (swigerror) {
+      Swig::DirectorException::raise(jenv, swigerror);
+    }
+    
+  } else {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object in SwigAndroidGuide::ITaskScheduler::executeOnUIThread ");
+  }
+  if (swigjobj) jenv->DeleteLocalRef(swigjobj);
+}
+
+void SwigDirector_ITaskScheduler::swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global) {
+  static struct {
+    const char *mname;
+    const char *mdesc;
+    jmethodID base_methid;
+  } methods[] = {
+    {
+      "isMainThread", "()Z", NULL 
+    },
+    {
+      "executeOnBackgroundThread", "(Lcom/goldberg/swigandroidguide/swiggenerated/FunctorVoid;)V", NULL 
+    },
+    {
+      "executeOnUIThread", "(Lcom/goldberg/swigandroidguide/swiggenerated/FunctorVoid;)V", NULL 
+    }
+  };
+  
+  static jclass baseclass = 0 ;
+  
+  if (swig_set_self(jenv, jself, swig_mem_own, weak_global)) {
+    if (!baseclass) {
+      baseclass = jenv->FindClass("com/goldberg/swigandroidguide/swiggenerated/ITaskScheduler");
+      if (!baseclass) return;
+      baseclass = (jclass) jenv->NewGlobalRef(baseclass);
+    }
+    bool derived = (jenv->IsSameObject(baseclass, jcls) ? false : true);
+    for (int i = 0; i < 3; ++i) {
       if (!methods[i].base_methid) {
         methods[i].base_methid = jenv->GetMethodID(baseclass, methods[i].mname, methods[i].mdesc);
         if (!methods[i].base_methid) return;
@@ -1039,6 +1285,128 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
   (void)jenv;
   (void)jcls;
   arg1 = *(std::shared_ptr< std::vector< std::shared_ptr< std::vector< unsigned char > > > > **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1FunctorVoidImpl(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  FunctorVoidImpl *arg1 = (FunctorVoidImpl *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(FunctorVoidImpl **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_FunctorVoidImpl_1call(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  FunctorVoidImpl *arg1 = (FunctorVoidImpl *) 0 ;
+  SwigDirector_FunctorVoidImpl *darg = 0;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(FunctorVoidImpl **)&jarg1; 
+  darg = dynamic_cast<SwigDirector_FunctorVoidImpl *>(arg1);
+  (darg)->call();
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1FunctorVoidImpl(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  FunctorVoidImpl *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (FunctorVoidImpl *)new SwigDirector_FunctorVoidImpl(jenv);
+  *(FunctorVoidImpl **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_FunctorVoidImpl_1director_1connect(JNIEnv *jenv, jclass jcls, jobject jself, jlong objarg, jboolean jswig_mem_own, jboolean jweak_global) {
+  FunctorVoidImpl *obj = *((FunctorVoidImpl **)&objarg);
+  (void)jcls;
+  SwigDirector_FunctorVoidImpl *director = static_cast<SwigDirector_FunctorVoidImpl *>(obj);
+  director->swig_connect_director(jenv, jself, jenv->GetObjectClass(jself), (jswig_mem_own == JNI_TRUE), (jweak_global == JNI_TRUE));
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_FunctorVoidImpl_1change_1ownership(JNIEnv *jenv, jclass jcls, jobject jself, jlong objarg, jboolean jtake_or_release) {
+  FunctorVoidImpl *obj = *((FunctorVoidImpl **)&objarg);
+  SwigDirector_FunctorVoidImpl *director = dynamic_cast<SwigDirector_FunctorVoidImpl *>(obj);
+  (void)jcls;
+  if (director) {
+    director->swig_java_change_ownership(jenv, jself, jtake_or_release ? true : false);
+  }
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1FunctorVoid_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  std::function< void () > *arg1 = 0 ;
+  std::function< void () > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::function< void () > **)&jarg1;
+  if (!arg1) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::function< void () > const & reference is null");
+    return 0;
+  } 
+  result = (std::function< void () > *)new std::function< void () >((std::function< void () > const &)*arg1);
+  *(std::function< void () > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_FunctorVoid_1call(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  std::function< void () > *arg1 = (std::function< void () > *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::function< void () > **)&jarg1; 
+  ((std::function< void () > const *)arg1)->operator ()();
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1FunctorVoid_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  jlong jresult = 0 ;
+  void (*arg1)() = (void (*)()) (void (*)())0 ;
+  std::function< void () > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(void (**)())&jarg1; 
+  result = (std::function< void () > *)new std::function< void () >(arg1);
+  *(std::function< void () > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1FunctorVoid_1_1SWIG_12(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  FunctorVoidImpl *arg1 = (FunctorVoidImpl *) 0 ;
+  std::function< void () > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(FunctorVoidImpl **)&jarg1; 
+  result = (std::function< void () > *)new_std_function_Sl_void_Sp__SP__Sg___SWIG_2(arg1);
+  *(std::function< void () > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1FunctorVoid(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  std::function< void () > *arg1 = (std::function< void () > *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(std::function< void () > **)&jarg1; 
   delete arg1;
 }
 
@@ -1340,6 +1708,21 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 }
 
 
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_IAndroidActivity_1getTaskScheduler(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  SwigAndroidGuide::IAndroidActivity *arg1 = (SwigAndroidGuide::IAndroidActivity *) 0 ;
+  SwigAndroidGuide::ITaskScheduler *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(SwigAndroidGuide::IAndroidActivity **)&jarg1; 
+  result = (SwigAndroidGuide::ITaskScheduler *)(arg1)->getTaskScheduler();
+  *(SwigAndroidGuide::ITaskScheduler **)&jresult = result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1IAndroidActivity(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   SwigAndroidGuide::IAndroidActivity *result = 0 ;
@@ -1370,18 +1753,134 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 }
 
 
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1ITaskScheduler(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  SwigAndroidGuide::ITaskScheduler *arg1 = (SwigAndroidGuide::ITaskScheduler *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(SwigAndroidGuide::ITaskScheduler **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ITaskScheduler_1isMainThread(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jboolean jresult = 0 ;
+  SwigAndroidGuide::ITaskScheduler *arg1 = (SwigAndroidGuide::ITaskScheduler *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(SwigAndroidGuide::ITaskScheduler **)&jarg1; 
+  result = (bool)(arg1)->isMainThread();
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ITaskScheduler_1executeOnBackgroundThread(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  SwigAndroidGuide::ITaskScheduler *arg1 = (SwigAndroidGuide::ITaskScheduler *) 0 ;
+  SwigValueWrapper< std::function< void () > > arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(SwigAndroidGuide::ITaskScheduler **)&jarg1; 
+  {
+    if (jarg2)
+    {
+      arg2 = **(std::function<void()>**)&(jarg2);
+    }
+    else
+    {
+      arg2 = std::function<void()>();
+    }
+  }
+  (arg1)->executeOnBackgroundThread(arg2);
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ITaskScheduler_1executeOnUIThread(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  SwigAndroidGuide::ITaskScheduler *arg1 = (SwigAndroidGuide::ITaskScheduler *) 0 ;
+  SwigValueWrapper< std::function< void () > > arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(SwigAndroidGuide::ITaskScheduler **)&jarg1; 
+  {
+    if (jarg2)
+    {
+      arg2 = **(std::function<void()>**)&(jarg2);
+    }
+    else
+    {
+      arg2 = std::function<void()>();
+    }
+  }
+  (arg1)->executeOnUIThread(arg2);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1ITaskScheduler(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  SwigAndroidGuide::ITaskScheduler *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (SwigAndroidGuide::ITaskScheduler *)new SwigDirector_ITaskScheduler(jenv);
+  *(SwigAndroidGuide::ITaskScheduler **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ITaskScheduler_1director_1connect(JNIEnv *jenv, jclass jcls, jobject jself, jlong objarg, jboolean jswig_mem_own, jboolean jweak_global) {
+  SwigAndroidGuide::ITaskScheduler *obj = *((SwigAndroidGuide::ITaskScheduler **)&objarg);
+  (void)jcls;
+  SwigDirector_ITaskScheduler *director = static_cast<SwigDirector_ITaskScheduler *>(obj);
+  director->swig_connect_director(jenv, jself, jenv->GetObjectClass(jself), (jswig_mem_own == JNI_TRUE), (jweak_global == JNI_TRUE));
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ITaskScheduler_1change_1ownership(JNIEnv *jenv, jclass jcls, jobject jself, jlong objarg, jboolean jtake_or_release) {
+  SwigAndroidGuide::ITaskScheduler *obj = *((SwigAndroidGuide::ITaskScheduler **)&objarg);
+  SwigDirector_ITaskScheduler *director = dynamic_cast<SwigDirector_ITaskScheduler *>(obj);
+  (void)jcls;
+  if (director) {
+    director->swig_java_change_ownership(jenv, jself, jtake_or_release ? true : false);
+  }
+}
+
+
 SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_swig_1module_1init(JNIEnv *jenv, jclass jcls) {
   int i;
   
   static struct {
     const char *method;
     const char *signature;
-  } methods[2] = {
+  } methods[7] = {
+    {
+      "SwigDirector_FunctorVoidImpl_call", "(Lcom/goldberg/swigandroidguide/swiggenerated/FunctorVoidImpl;)V" 
+    },
     {
       "SwigDirector_IAndroidActivity_showToast", "(Lcom/goldberg/swigandroidguide/swiggenerated/IAndroidActivity;Ljava/lang/String;)V" 
     },
     {
       "SwigDirector_IAndroidActivity_sendMessage", "(Lcom/goldberg/swigandroidguide/swiggenerated/IAndroidActivity;J)V" 
+    },
+    {
+      "SwigDirector_IAndroidActivity_getTaskScheduler", "(Lcom/goldberg/swigandroidguide/swiggenerated/IAndroidActivity;)J" 
+    },
+    {
+      "SwigDirector_ITaskScheduler_isMainThread", "(Lcom/goldberg/swigandroidguide/swiggenerated/ITaskScheduler;)Z" 
+    },
+    {
+      "SwigDirector_ITaskScheduler_executeOnBackgroundThread", "(Lcom/goldberg/swigandroidguide/swiggenerated/ITaskScheduler;J)V" 
+    },
+    {
+      "SwigDirector_ITaskScheduler_executeOnUIThread", "(Lcom/goldberg/swigandroidguide/swiggenerated/ITaskScheduler;J)V" 
     }
   };
   Swig::jclass_SwigAndroidGuideJNI = (jclass) jenv->NewGlobalRef(jcls);

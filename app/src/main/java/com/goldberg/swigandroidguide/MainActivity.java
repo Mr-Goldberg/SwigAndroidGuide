@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.goldberg.swigandroidguide.swiggenerated.ActivityModel;
 import com.goldberg.swigandroidguide.swiggenerated.IAndroidActivity;
+import com.goldberg.swigandroidguide.swiggenerated.ITaskScheduler;
 import com.goldberg.swigandroidguide.swiggenerated.Message;
 
 import java.util.Locale;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity
 
     private final ActivityModel activityModel = new ActivityModel();
     private final AndroidActivity androidActivity = new AndroidActivity();
+    private final ITaskScheduler taskScheduler = new TaskScheduler();
 
     private class AndroidActivity extends IAndroidActivity
     {
@@ -39,6 +41,12 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(MainActivity.this,
                     String.format(Locale.US, "Message sent: '%d %s'", message.getId(), message.getText()),
                     Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public ITaskScheduler getTaskScheduler()
+        {
+            return taskScheduler;
         }
     }
 

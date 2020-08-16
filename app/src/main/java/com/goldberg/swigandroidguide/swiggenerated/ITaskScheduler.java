@@ -8,16 +8,16 @@
 
 package com.goldberg.swigandroidguide.swiggenerated;
 
-public class IAndroidActivity {
+public class ITaskScheduler {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 
-  protected IAndroidActivity(long cPtr, boolean cMemoryOwn) {
+  protected ITaskScheduler(long cPtr, boolean cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = cPtr;
   }
 
-  protected static long getCPtr(IAndroidActivity obj) {
+  protected static long getCPtr(ITaskScheduler obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 
@@ -30,7 +30,7 @@ public class IAndroidActivity {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        SwigAndroidGuideJNI.delete_IAndroidActivity(swigCPtr);
+        SwigAndroidGuideJNI.delete_ITaskScheduler(swigCPtr);
       }
       swigCPtr = 0;
     }
@@ -43,30 +43,29 @@ public class IAndroidActivity {
 
   public void swigReleaseOwnership() {
     swigCMemOwn = false;
-    SwigAndroidGuideJNI.IAndroidActivity_change_ownership(this, swigCPtr, false);
+    SwigAndroidGuideJNI.ITaskScheduler_change_ownership(this, swigCPtr, false);
   }
 
   public void swigTakeOwnership() {
     swigCMemOwn = true;
-    SwigAndroidGuideJNI.IAndroidActivity_change_ownership(this, swigCPtr, true);
+    SwigAndroidGuideJNI.ITaskScheduler_change_ownership(this, swigCPtr, true);
   }
 
-  public void showToast(java.lang.String text) {
-    SwigAndroidGuideJNI.IAndroidActivity_showToast(swigCPtr, this, text);
+  public boolean isMainThread() {
+    return SwigAndroidGuideJNI.ITaskScheduler_isMainThread(swigCPtr, this);
   }
 
-  public void sendMessage(Message message) {
-    SwigAndroidGuideJNI.IAndroidActivity_sendMessage(swigCPtr, this, Message.getCPtr(message), message);
+  public void executeOnBackgroundThread(FunctorVoid function) {
+    SwigAndroidGuideJNI.ITaskScheduler_executeOnBackgroundThread(swigCPtr, this, FunctorVoid.getCPtr(FunctorVoid.makeNative(function)), function);
   }
 
-  public ITaskScheduler getTaskScheduler() {
-    long cPtr = SwigAndroidGuideJNI.IAndroidActivity_getTaskScheduler(swigCPtr, this);
-    return (cPtr == 0) ? null : new ITaskScheduler(cPtr, false);
+  public void executeOnUIThread(FunctorVoid function) {
+    SwigAndroidGuideJNI.ITaskScheduler_executeOnUIThread(swigCPtr, this, FunctorVoid.getCPtr(FunctorVoid.makeNative(function)), function);
   }
 
-  public IAndroidActivity() {
-    this(SwigAndroidGuideJNI.new_IAndroidActivity(), true);
-    SwigAndroidGuideJNI.IAndroidActivity_director_connect(this, swigCPtr, true, true);
+  public ITaskScheduler() {
+    this(SwigAndroidGuideJNI.new_ITaskScheduler(), true);
+    SwigAndroidGuideJNI.ITaskScheduler_director_connect(this, swigCPtr, true, true);
   }
 
 }

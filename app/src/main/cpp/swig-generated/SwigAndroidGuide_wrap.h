@@ -11,6 +11,21 @@
 #ifndef SWIG_SwigAndroidGuide_WRAP_H_
 #define SWIG_SwigAndroidGuide_WRAP_H_
 
+struct SwigDirector_FunctorVoidImpl : public FunctorVoidImpl, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_FunctorVoidImpl(JNIEnv *jenv);
+    virtual ~SwigDirector_FunctorVoidImpl();
+    virtual void call();
+public:
+    bool swig_overrides(int n) {
+      return (n < 1 ? swig_override[n] : false);
+    }
+protected:
+    Swig::BoolArray<1> swig_override;
+};
+
 class SwigDirector_IAndroidActivity : public SwigAndroidGuide::IAndroidActivity, public Swig::Director {
 
 public:
@@ -19,12 +34,30 @@ public:
     virtual ~SwigDirector_IAndroidActivity();
     virtual void showToast(std::shared_ptr< std::string > text);
     virtual void sendMessage(std::shared_ptr< SwigAndroidGuide::Message > message);
+    virtual SwigAndroidGuide::ITaskScheduler *getTaskScheduler();
 public:
     bool swig_overrides(int n) {
-      return (n < 2 ? swig_override[n] : false);
+      return (n < 3 ? swig_override[n] : false);
     }
 protected:
-    Swig::BoolArray<2> swig_override;
+    Swig::BoolArray<3> swig_override;
+};
+
+class SwigDirector_ITaskScheduler : public SwigAndroidGuide::ITaskScheduler, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_ITaskScheduler(JNIEnv *jenv);
+    virtual ~SwigDirector_ITaskScheduler();
+    virtual bool isMainThread();
+    virtual void executeOnBackgroundThread(std::function< void () > function);
+    virtual void executeOnUIThread(std::function< void () > function);
+public:
+    bool swig_overrides(int n) {
+      return (n < 3 ? swig_override[n] : false);
+    }
+protected:
+    Swig::BoolArray<3> swig_override;
 };
 
 

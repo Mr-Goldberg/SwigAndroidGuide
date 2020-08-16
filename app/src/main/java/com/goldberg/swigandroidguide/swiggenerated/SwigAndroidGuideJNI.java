@@ -13,6 +13,16 @@ public class SwigAndroidGuideJNI {
   public final static native void delete_shared_ptr_to_string(long jarg1);
   public final static native long new_shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes();
   public final static native void delete_shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes(long jarg1);
+  public final static native void delete_FunctorVoidImpl(long jarg1);
+  public final static native void FunctorVoidImpl_call(long jarg1, FunctorVoidImpl jarg1_);
+  public final static native long new_FunctorVoidImpl();
+  public final static native void FunctorVoidImpl_director_connect(FunctorVoidImpl obj, long cptr, boolean mem_own, boolean weak_global);
+  public final static native void FunctorVoidImpl_change_ownership(FunctorVoidImpl obj, long cptr, boolean take_or_release);
+  public final static native long new_FunctorVoid__SWIG_0(long jarg1, FunctorVoid jarg1_);
+  public final static native void FunctorVoid_call(long jarg1, FunctorVoid jarg1_);
+  public final static native long new_FunctorVoid__SWIG_1(long jarg1);
+  public final static native long new_FunctorVoid__SWIG_2(long jarg1, FunctorVoidImpl jarg1_);
+  public final static native void delete_FunctorVoid(long jarg1);
   public final static native void ActivityModel_onCreate(long jarg1, ActivityModel jarg1_, long jarg2, IAndroidActivity jarg2_);
   public final static native void ActivityModel_setMultiplier(long jarg1, ActivityModel jarg1_, int jarg2);
   public final static native int ActivityModel_multiply__SWIG_0(long jarg1, ActivityModel jarg1_, int jarg2);
@@ -29,15 +39,38 @@ public class SwigAndroidGuideJNI {
   public final static native void delete_IAndroidActivity(long jarg1);
   public final static native void IAndroidActivity_showToast(long jarg1, IAndroidActivity jarg1_, java.lang.String jarg2);
   public final static native void IAndroidActivity_sendMessage(long jarg1, IAndroidActivity jarg1_, long jarg2, Message jarg2_);
+  public final static native long IAndroidActivity_getTaskScheduler(long jarg1, IAndroidActivity jarg1_);
   public final static native long new_IAndroidActivity();
   public final static native void IAndroidActivity_director_connect(IAndroidActivity obj, long cptr, boolean mem_own, boolean weak_global);
   public final static native void IAndroidActivity_change_ownership(IAndroidActivity obj, long cptr, boolean take_or_release);
+  public final static native void delete_ITaskScheduler(long jarg1);
+  public final static native boolean ITaskScheduler_isMainThread(long jarg1, ITaskScheduler jarg1_);
+  public final static native void ITaskScheduler_executeOnBackgroundThread(long jarg1, ITaskScheduler jarg1_, long jarg2, FunctorVoid jarg2_);
+  public final static native void ITaskScheduler_executeOnUIThread(long jarg1, ITaskScheduler jarg1_, long jarg2, FunctorVoid jarg2_);
+  public final static native long new_ITaskScheduler();
+  public final static native void ITaskScheduler_director_connect(ITaskScheduler obj, long cptr, boolean mem_own, boolean weak_global);
+  public final static native void ITaskScheduler_change_ownership(ITaskScheduler obj, long cptr, boolean take_or_release);
 
+  public static void SwigDirector_FunctorVoidImpl_call(FunctorVoidImpl jself) {
+    jself.call();
+  }
   public static void SwigDirector_IAndroidActivity_showToast(IAndroidActivity jself, java.lang.String text) {
     jself.showToast(text);
   }
   public static void SwigDirector_IAndroidActivity_sendMessage(IAndroidActivity jself, long message) {
     jself.sendMessage((message == 0) ? null : new Message(message, true));
+  }
+  public static long SwigDirector_IAndroidActivity_getTaskScheduler(IAndroidActivity jself) {
+    return ITaskScheduler.getCPtr(jself.getTaskScheduler());
+  }
+  public static boolean SwigDirector_ITaskScheduler_isMainThread(ITaskScheduler jself) {
+    return jself.isMainThread();
+  }
+  public static void SwigDirector_ITaskScheduler_executeOnBackgroundThread(ITaskScheduler jself, long function) {
+    jself.executeOnBackgroundThread(new FunctorVoid(function, true));
+  }
+  public static void SwigDirector_ITaskScheduler_executeOnUIThread(ITaskScheduler jself, long function) {
+    jself.executeOnUIThread(new FunctorVoid(function, true));
   }
 
   private final static native void swig_module_init();

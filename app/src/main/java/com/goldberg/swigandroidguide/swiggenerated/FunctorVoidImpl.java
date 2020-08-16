@@ -8,16 +8,16 @@
 
 package com.goldberg.swigandroidguide.swiggenerated;
 
-public class IAndroidActivity {
+public class FunctorVoidImpl {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 
-  protected IAndroidActivity(long cPtr, boolean cMemoryOwn) {
+  protected FunctorVoidImpl(long cPtr, boolean cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = cPtr;
   }
 
-  protected static long getCPtr(IAndroidActivity obj) {
+  protected static long getCPtr(FunctorVoidImpl obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 
@@ -30,7 +30,7 @@ public class IAndroidActivity {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        SwigAndroidGuideJNI.delete_IAndroidActivity(swigCPtr);
+        SwigAndroidGuideJNI.delete_FunctorVoidImpl(swigCPtr);
       }
       swigCPtr = 0;
     }
@@ -43,30 +43,21 @@ public class IAndroidActivity {
 
   public void swigReleaseOwnership() {
     swigCMemOwn = false;
-    SwigAndroidGuideJNI.IAndroidActivity_change_ownership(this, swigCPtr, false);
+    SwigAndroidGuideJNI.FunctorVoidImpl_change_ownership(this, swigCPtr, false);
   }
 
   public void swigTakeOwnership() {
     swigCMemOwn = true;
-    SwigAndroidGuideJNI.IAndroidActivity_change_ownership(this, swigCPtr, true);
+    SwigAndroidGuideJNI.FunctorVoidImpl_change_ownership(this, swigCPtr, true);
   }
 
-  public void showToast(java.lang.String text) {
-    SwigAndroidGuideJNI.IAndroidActivity_showToast(swigCPtr, this, text);
+  protected void call() {
+    SwigAndroidGuideJNI.FunctorVoidImpl_call(swigCPtr, this);
   }
 
-  public void sendMessage(Message message) {
-    SwigAndroidGuideJNI.IAndroidActivity_sendMessage(swigCPtr, this, Message.getCPtr(message), message);
-  }
-
-  public ITaskScheduler getTaskScheduler() {
-    long cPtr = SwigAndroidGuideJNI.IAndroidActivity_getTaskScheduler(swigCPtr, this);
-    return (cPtr == 0) ? null : new ITaskScheduler(cPtr, false);
-  }
-
-  public IAndroidActivity() {
-    this(SwigAndroidGuideJNI.new_IAndroidActivity(), true);
-    SwigAndroidGuideJNI.IAndroidActivity_director_connect(this, swigCPtr, true, true);
+  public FunctorVoidImpl() {
+    this(SwigAndroidGuideJNI.new_FunctorVoidImpl(), true);
+    SwigAndroidGuideJNI.FunctorVoidImpl_director_connect(this, swigCPtr, true, true);
   }
 
 }
