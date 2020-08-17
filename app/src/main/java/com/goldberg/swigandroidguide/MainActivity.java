@@ -11,6 +11,8 @@ import com.goldberg.swigandroidguide.swiggenerated.ActivityModel;
 import com.goldberg.swigandroidguide.swiggenerated.IAndroidActivity;
 import com.goldberg.swigandroidguide.swiggenerated.ITaskScheduler;
 import com.goldberg.swigandroidguide.swiggenerated.Message;
+import com.goldberg.swigandroidguide.swiggenerated.PhotoMessage;
+import com.goldberg.swigandroidguide.swiggenerated.VideoMessage;
 
 import java.util.Locale;
 
@@ -38,9 +40,25 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void sendMessage(Message message)
         {
-            Toast.makeText(MainActivity.this,
-                    String.format(Locale.US, "Message sent: '%d %s'", message.getId(), message.getText()),
-                    Toast.LENGTH_SHORT).show();
+            PhotoMessage photoMessage = PhotoMessage.dynamic_cast(message);
+            if (photoMessage != null)
+            {
+                Log.d(TAG, String.format(Locale.US, "Photo message sent: '%d %s, %d bytes'",
+                        photoMessage.getId(), photoMessage.getText(), photoMessage.getPhotoData().length));
+
+                return;
+            }
+
+            VideoMessage videoMessage = VideoMessage.dynamic_cast(message);
+            if (videoMessage != null)
+            {
+                Log.d(TAG, String.format(Locale.US, "Photo message sent: '%d %s, %d chunks'",
+                        videoMessage.getId(), videoMessage.getText(), videoMessage.getVideoChunks().length));
+
+                return;
+            }
+
+            Log.d(TAG, String.format(Locale.US, "Message sent: '%d %s'", message.getId(), message.getText()));
         }
 
         @Override

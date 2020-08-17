@@ -773,6 +773,51 @@ namespace Swig {
 #include <stdexcept>
 
 
+#include <memory>
+#include <vector>
+
+
+namespace
+{
+	std::shared_ptr<std::vector<unsigned char>> convertArrayOfBytesFromJavaToCpp(JNIEnv *jenv, jbyteArray javaArrayOfBytes)
+	{
+		if (!javaArrayOfBytes) return nullptr;
+		
+		jbyte *p_buffer = jenv->GetByteArrayElements(javaArrayOfBytes, nullptr);
+		if (!p_buffer) return nullptr;
+		
+		jsize lengthOfBuffer = jenv->GetArrayLength(javaArrayOfBytes);
+		std::shared_ptr<std::vector<unsigned char>> result;
+		if (lengthOfBuffer != 0)
+		{
+			result = std::make_shared<std::vector<unsigned char>>(p_buffer, p_buffer + lengthOfBuffer);
+		}
+		else
+		{
+			result = std::make_shared<std::vector<unsigned char>>();
+		}
+		
+		jenv->ReleaseByteArrayElements(javaArrayOfBytes, p_buffer, 0);
+		return result;
+	}
+	
+	jbyteArray convertArrayOfBytesFromCppToJava(JNIEnv *jenv, std::shared_ptr<std::vector<unsigned char>> vectorOfBytes)
+	{
+		if (!vectorOfBytes) return nullptr;
+
+		jbyteArray javaArrayOfByte = jenv->NewByteArray(vectorOfBytes->size());
+		if (!javaArrayOfByte) return nullptr;
+		
+		if (vectorOfBytes->size() != 0)
+		{
+			jenv->SetByteArrayRegion(javaArrayOfByte, 0, vectorOfBytes->size(), (jbyte *) &vectorOfBytes->at(0));
+		}
+		
+		return javaArrayOfByte;
+	}
+}
+
+
 #include "Types.h"
 
 namespace
@@ -884,6 +929,8 @@ SWIGINTERN std::function< void () > *new_std_function_Sl_void_Sp__SP__Sg___SWIG_
 #include "Types.h"
 #include "ActivityModel.h"
 #include "Message.h"
+#include "PhotoMessage.h"
+#include "VideoMessage.h"
 #include "IAndroidActivity.h"
 #include "ITaskScheduler.h"
 
@@ -897,6 +944,12 @@ struct SWIG_null_deleter {
 #define SWIG_NO_NULL_DELETER_SWIG_POINTER_NEW
 #define SWIG_NO_NULL_DELETER_SWIG_POINTER_OWN
 
+SWIGINTERN std::shared_ptr< SwigAndroidGuide::PhotoMessage > SwigAndroidGuide_PhotoMessage_dynamic_cast(std::shared_ptr< SwigAndroidGuide::Message > arg){
+        return std::dynamic_pointer_cast<SwigAndroidGuide::PhotoMessage>(arg);
+    }
+SWIGINTERN std::shared_ptr< SwigAndroidGuide::VideoMessage > SwigAndroidGuide_VideoMessage_dynamic_cast(std::shared_ptr< SwigAndroidGuide::Message > arg){
+        return std::dynamic_pointer_cast<SwigAndroidGuide::VideoMessage>(arg);
+    }
 
 
 /* ---------------------------------------------------
@@ -1546,6 +1599,19 @@ SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAn
 }
 
 
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1Message(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  (void)arg1; delete smartarg1;
+}
+
+
 SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1getId(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jint jresult = 0 ;
   SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
@@ -1640,15 +1706,206 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 }
 
 
-SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1Message(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
-  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1PhotoMessage(JNIEnv *jenv, jclass jcls, jint jarg1, jstring jarg2) {
+  jlong jresult = 0 ;
+  int arg1 ;
+  std::shared_ptr< std::string > arg2 ;
+  SwigAndroidGuide::PhotoMessage *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = (int)jarg1; 
+  {
+    //actual JNI call:
+    //const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
+    
+    const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
+    if (!psz_string)
+    {
+      arg2 = nullptr;
+    }
+    else
+    {
+      arg2 = std::make_shared<std::string>(psz_string);
+      
+      //psz_string needs to be released using jenv->ReleaseStringUTFChars(jarg2, psz_string);
+      jenv->ReleaseStringUTFChars(jarg2, psz_string);
+    }
+  }
+  result = (SwigAndroidGuide::PhotoMessage *)new SwigAndroidGuide::PhotoMessage(arg1,arg2);
+  
+  *(std::shared_ptr<  SwigAndroidGuide::PhotoMessage > **)&jresult = result ? new std::shared_ptr<  SwigAndroidGuide::PhotoMessage >(result SWIG_NO_NULL_DELETER_1) : 0;
+  
+  return jresult;
+}
+
+
+SWIGEXPORT jbyteArray JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_PhotoMessage_1getPhotoData(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jbyteArray jresult = 0 ;
+  SwigAndroidGuide::PhotoMessage *arg1 = (SwigAndroidGuide::PhotoMessage *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::PhotoMessage > *smartarg1 = 0 ;
+  SwigValueWrapper< std::shared_ptr< std::vector< unsigned char > > > result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::PhotoMessage > **)&jarg1;
+  arg1 = (SwigAndroidGuide::PhotoMessage *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (arg1)->getPhotoData();
+  {
+    jresult = convertArrayOfBytesFromCppToJava(jenv, result);
+  }
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_PhotoMessage_1setPhotoData(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jbyteArray jarg2) {
+  SwigAndroidGuide::PhotoMessage *arg1 = (SwigAndroidGuide::PhotoMessage *) 0 ;
+  SwigValueWrapper< std::shared_ptr< std::vector< unsigned char > > > arg2 ;
+  std::shared_ptr< SwigAndroidGuide::PhotoMessage > *smartarg1 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::PhotoMessage > **)&jarg1;
+  arg1 = (SwigAndroidGuide::PhotoMessage *)(smartarg1 ? smartarg1->get() : 0); 
+  {
+    arg2 = convertArrayOfBytesFromJavaToCpp(jenv, jarg2);
+  }
+  (arg1)->setPhotoData(arg2);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_PhotoMessage_1dynamic_1cast(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  std::shared_ptr< SwigAndroidGuide::Message > arg1 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *argp1 ;
+  std::shared_ptr< SwigAndroidGuide::PhotoMessage > result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  argp1 = *(std::shared_ptr< SwigAndroidGuide::Message > **)&jarg1;
+  if (argp1) arg1 = *argp1; 
+  result = SwigAndroidGuide_PhotoMessage_dynamic_cast(arg1);
+  *(std::shared_ptr< SwigAndroidGuide::PhotoMessage > **)&jresult = result ? new std::shared_ptr< SwigAndroidGuide::PhotoMessage >(result) : 0; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1PhotoMessage(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  SwigAndroidGuide::PhotoMessage *arg1 = (SwigAndroidGuide::PhotoMessage *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::PhotoMessage > *smartarg1 = 0 ;
   
   (void)jenv;
   (void)jcls;
   
-  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
-  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::PhotoMessage > **)&jarg1;
+  arg1 = (SwigAndroidGuide::PhotoMessage *)(smartarg1 ? smartarg1->get() : 0); 
+  (void)arg1; delete smartarg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1VideoMessage(JNIEnv *jenv, jclass jcls, jint jarg1, jstring jarg2) {
+  jlong jresult = 0 ;
+  int arg1 ;
+  std::shared_ptr< std::string > arg2 ;
+  SwigAndroidGuide::VideoMessage *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = (int)jarg1; 
+  {
+    //actual JNI call:
+    //const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
+    
+    const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
+    if (!psz_string)
+    {
+      arg2 = nullptr;
+    }
+    else
+    {
+      arg2 = std::make_shared<std::string>(psz_string);
+      
+      //psz_string needs to be released using jenv->ReleaseStringUTFChars(jarg2, psz_string);
+      jenv->ReleaseStringUTFChars(jarg2, psz_string);
+    }
+  }
+  result = (SwigAndroidGuide::VideoMessage *)new SwigAndroidGuide::VideoMessage(arg1,arg2);
+  
+  *(std::shared_ptr<  SwigAndroidGuide::VideoMessage > **)&jresult = result ? new std::shared_ptr<  SwigAndroidGuide::VideoMessage >(result SWIG_NO_NULL_DELETER_1) : 0;
+  
+  return jresult;
+}
+
+
+SWIGEXPORT jobjectArray JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VideoMessage_1getVideoChunks(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jobjectArray jresult = 0 ;
+  SwigAndroidGuide::VideoMessage *arg1 = (SwigAndroidGuide::VideoMessage *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::VideoMessage > *smartarg1 = 0 ;
+  shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::VideoMessage > **)&jarg1;
+  arg1 = (SwigAndroidGuide::VideoMessage *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (arg1)->getVideoChunks();
+  {
+    jresult = convertArrayOfArraysOfByteFromCppToJava(jenv, result);
+  }
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VideoMessage_1setVideoChunks(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jobjectArray jarg2) {
+  SwigAndroidGuide::VideoMessage *arg1 = (SwigAndroidGuide::VideoMessage *) 0 ;
+  shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes arg2 ;
+  std::shared_ptr< SwigAndroidGuide::VideoMessage > *smartarg1 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::VideoMessage > **)&jarg1;
+  arg1 = (SwigAndroidGuide::VideoMessage *)(smartarg1 ? smartarg1->get() : 0); 
+  {
+    arg2 = convertArrayOfArraysOfByteFromJavaToCpp(jenv, jarg2);
+  }
+  (arg1)->setVideoChunks(arg2);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VideoMessage_1dynamic_1cast(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  std::shared_ptr< SwigAndroidGuide::Message > arg1 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *argp1 ;
+  std::shared_ptr< SwigAndroidGuide::VideoMessage > result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  argp1 = *(std::shared_ptr< SwigAndroidGuide::Message > **)&jarg1;
+  if (argp1) arg1 = *argp1; 
+  result = SwigAndroidGuide_VideoMessage_dynamic_cast(arg1);
+  *(std::shared_ptr< SwigAndroidGuide::VideoMessage > **)&jresult = result ? new std::shared_ptr< SwigAndroidGuide::VideoMessage >(result) : 0; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1VideoMessage(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  SwigAndroidGuide::VideoMessage *arg1 = (SwigAndroidGuide::VideoMessage *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::VideoMessage > *smartarg1 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::VideoMessage > **)&jarg1;
+  arg1 = (SwigAndroidGuide::VideoMessage *)(smartarg1 ? smartarg1->get() : 0); 
   (void)arg1; delete smartarg1;
 }
 
@@ -1853,6 +2110,26 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
   }
 }
 
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_PhotoMessage_1SWIGSmartPtrUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    std::shared_ptr< SwigAndroidGuide::PhotoMessage > *argp1;
+    (void)jenv;
+    (void)jcls;
+    argp1 = *(std::shared_ptr< SwigAndroidGuide::PhotoMessage > **)&jarg1;
+    *(std::shared_ptr< SwigAndroidGuide::Message > **)&baseptr = argp1 ? new std::shared_ptr< SwigAndroidGuide::Message >(*argp1) : 0;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VideoMessage_1SWIGSmartPtrUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    std::shared_ptr< SwigAndroidGuide::VideoMessage > *argp1;
+    (void)jenv;
+    (void)jcls;
+    argp1 = *(std::shared_ptr< SwigAndroidGuide::VideoMessage > **)&jarg1;
+    *(std::shared_ptr< SwigAndroidGuide::Message > **)&baseptr = argp1 ? new std::shared_ptr< SwigAndroidGuide::Message >(*argp1) : 0;
+    return baseptr;
+}
 
 SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_swig_1module_1init(JNIEnv *jenv, jclass jcls) {
   int i;

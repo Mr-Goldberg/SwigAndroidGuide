@@ -3,6 +3,7 @@
 #include "IAndroidActivity.h"
 #include "ITaskScheduler.h"
 #include "Message.h"
+#include "PhotoMessage.h"
 
 using namespace std;
 
@@ -27,6 +28,18 @@ namespace SwigAndroidGuide
                                 });
                     });
         }
+
+        void sendPolymorphicMessage(IAndroidActivity *androidActivity)
+        {
+            shared_ptr<PhotoMessage> message = make_shared<PhotoMessage>(34, make_shared<string>("Picture"));
+            shared_ptr<vector<byte>> data = make_shared<vector<byte>>();
+            for (int i = 0; i < 201; ++i)
+            {
+                data->push_back((byte) i);
+            }
+            message->setPhotoData(data);
+            androidActivity->sendMessage(message);
+        }
     }
 
     void ActivityModel::onCreate(IAndroidActivity *androidActivity)
@@ -34,6 +47,7 @@ namespace SwigAndroidGuide
         androidActivity->showToast(make_shared<string>("Toast from C++"));
         androidActivity->sendMessage(make_shared<Message>(22, make_shared<string>("Greetings!")));
         doAsyncTasks(androidActivity);
+        sendPolymorphicMessage(androidActivity);
     }
 
     void ActivityModel::setMultiplier(int multiplier)

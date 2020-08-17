@@ -5,7 +5,7 @@ using namespace std;
 
 namespace SwigAndroidGuide
 {
-    Message::Message(int id, const shared_ptr<string> text) : _id(id), text(text) {}
+    Message::Message(int id, shared_ptr<string> text) : _id(id), text(text) {}
 
     int Message::getId()
     {

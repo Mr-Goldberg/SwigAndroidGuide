@@ -9,7 +9,9 @@ namespace SwigAndroidGuide
     {
     public:
 
-        Message(int id, const std::shared_ptr<std::string> text);
+        Message(int id, std::shared_ptr<std::string> text);
+
+        virtual ~Message() = default;
 
         int getId();
 

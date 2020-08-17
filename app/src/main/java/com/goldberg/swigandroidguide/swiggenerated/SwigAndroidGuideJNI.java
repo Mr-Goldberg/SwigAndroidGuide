@@ -31,11 +31,21 @@ public class SwigAndroidGuideJNI {
   public final static native long new_ActivityModel();
   public final static native void delete_ActivityModel(long jarg1);
   public final static native long new_Message(int jarg1, java.lang.String jarg2);
+  public final static native void delete_Message(long jarg1);
   public final static native int Message_getId(long jarg1, Message jarg1_);
   public final static native void Message_setId(long jarg1, Message jarg1_, int jarg2);
   public final static native java.lang.String Message_getText(long jarg1, Message jarg1_);
   public final static native void Message_setText(long jarg1, Message jarg1_, java.lang.String jarg2);
-  public final static native void delete_Message(long jarg1);
+  public final static native long new_PhotoMessage(int jarg1, java.lang.String jarg2);
+  public final static native byte[] PhotoMessage_getPhotoData(long jarg1, PhotoMessage jarg1_);
+  public final static native void PhotoMessage_setPhotoData(long jarg1, PhotoMessage jarg1_, byte[] jarg2);
+  public final static native long PhotoMessage_dynamic_cast(long jarg1, Message jarg1_);
+  public final static native void delete_PhotoMessage(long jarg1);
+  public final static native long new_VideoMessage(int jarg1, java.lang.String jarg2);
+  public final static native byte[][] VideoMessage_getVideoChunks(long jarg1, VideoMessage jarg1_);
+  public final static native void VideoMessage_setVideoChunks(long jarg1, VideoMessage jarg1_, byte[][] jarg2);
+  public final static native long VideoMessage_dynamic_cast(long jarg1, Message jarg1_);
+  public final static native void delete_VideoMessage(long jarg1);
   public final static native void delete_IAndroidActivity(long jarg1);
   public final static native void IAndroidActivity_showToast(long jarg1, IAndroidActivity jarg1_, java.lang.String jarg2);
   public final static native void IAndroidActivity_sendMessage(long jarg1, IAndroidActivity jarg1_, long jarg2, Message jarg2_);
@@ -50,6 +60,8 @@ public class SwigAndroidGuideJNI {
   public final static native long new_ITaskScheduler();
   public final static native void ITaskScheduler_director_connect(ITaskScheduler obj, long cptr, boolean mem_own, boolean weak_global);
   public final static native void ITaskScheduler_change_ownership(ITaskScheduler obj, long cptr, boolean take_or_release);
+  public final static native long PhotoMessage_SWIGSmartPtrUpcast(long jarg1);
+  public final static native long VideoMessage_SWIGSmartPtrUpcast(long jarg1);
 
   public static void SwigDirector_FunctorVoidImpl_call(FunctorVoidImpl jself) {
     jself.call();
