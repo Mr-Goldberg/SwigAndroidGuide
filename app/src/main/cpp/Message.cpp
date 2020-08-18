@@ -1,5 +1,4 @@
 #include "Message.h"
-#include "../../../../../../../../../home/alex/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/c++/v1/memory"
 
 using namespace std;
 
