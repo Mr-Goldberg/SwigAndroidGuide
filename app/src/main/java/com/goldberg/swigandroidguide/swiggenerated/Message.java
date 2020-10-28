@@ -40,10 +40,6 @@ public class Message {
     }
   }
 
-  public Message(int id, java.lang.String text) {
-    this(SwigAndroidGuideJNI.new_Message(id, text), true);
-  }
-
   public int getId() {
     return SwigAndroidGuideJNI.Message_getId(swigCPtr, this);
   }
@@ -58,6 +54,10 @@ public class Message {
 
   public void setText(java.lang.String text) {
     SwigAndroidGuideJNI.Message_setText(swigCPtr, this, text);
+  }
+
+  public Message() {
+    this(SwigAndroidGuideJNI.new_Message(), true);
   }
 
 }

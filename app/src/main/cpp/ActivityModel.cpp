@@ -29,25 +29,32 @@ namespace SwigAndroidGuide
                     });
         }
 
-        void sendPolymorphicMessage(IAndroidActivity *androidActivity)
+        void sendPhotoMessage(IAndroidActivity *androidActivity)
         {
-            shared_ptr<PhotoMessage> message = make_shared<PhotoMessage>(34, make_shared<string>("Picture"));
-            shared_ptr<vector<byte>> data = make_shared<vector<byte>>();
-            for (int i = 0; i < 201; ++i)
-            {
-                data->push_back((byte) i);
-            }
-            message->setPhotoData(data);
-            androidActivity->sendMessage(message);
+            shared_ptr<PhotoMessage> photoMessage = make_shared<PhotoMessage>();
+            photoMessage->setId(27);
+            photoMessage->setText(make_shared<string>("PhotoMessage!"));
+
+            vector<byte> photoData;
+            photoData.push_back((byte)78);
+            photoData.push_back((byte)64);
+            photoData.push_back((byte)35);
+            photoMessage->setPhotoData(photoData);
+
+            androidActivity->sendMessage(photoMessage);
         }
     }
 
     void ActivityModel::onCreate(IAndroidActivity *androidActivity)
     {
-        androidActivity->showToast(make_shared<string>("Toast from C++"));
-        androidActivity->sendMessage(make_shared<Message>(22, make_shared<string>("Greetings!")));
+        androidActivity->showToast("Toast from C++");
+
+        shared_ptr<Message> message = make_shared<Message>();
+        message->setId(22);
+        message->setText(make_shared<string>("Greetings!"));
+        androidActivity->sendMessage(message);
+        sendPhotoMessage(androidActivity);
         doAsyncTasks(androidActivity);
-        sendPolymorphicMessage(androidActivity);
     }
 
     void ActivityModel::setMultiplier(int multiplier)

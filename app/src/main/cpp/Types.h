@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <string>
 
 typedef unsigned char byte;
 typedef std::shared_ptr <std::string> shared_ptr_to_string;

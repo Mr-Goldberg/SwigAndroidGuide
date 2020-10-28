@@ -753,6 +753,14 @@ namespace Swig {
 #include <string>
 
 
+#include <typeinfo>
+#include <stdexcept>
+
+
+#include <vector>
+#include <stdexcept>
+
+
   #include <functional>
   #include <iostream>
 
@@ -765,12 +773,31 @@ namespace Swig {
 #include <string>
 
 
-#include <typeinfo>
-#include <stdexcept>
+namespace
+{
+	std::shared_ptr<std::string> convertStringFromJavaToCpp(JNIEnv *jenv, jstring javaString)
+	{
+		const char * psz_string = jenv->GetStringUTFChars(javaString, NULL);
+		if (!psz_string)
+		{
+			return nullptr;
+		}
+		
+		std::shared_ptr<std::string> cppString = std::make_shared<std::string>(psz_string);
+		jenv->ReleaseStringUTFChars(javaString, psz_string);
+		return cppString;
+	}
+	
+	jstring convertStringFromCppToJava(JNIEnv *jenv, std::shared_ptr<std::string> cppString)
+	{
+		if (!cppString)
+		{
+			return nullptr;
+		}
 
-
-#include <vector>
-#include <stdexcept>
+		return jenv->NewStringUTF(cppString->c_str());
+	}
+}
 
 
 #include <memory>
@@ -915,6 +942,129 @@ namespace
 }
 
 
+/* Check for overflow converting to Java int (always signed 32-bit) from (unsigned variable-bit) size_t */
+SWIGINTERN jint SWIG_JavaIntFromSize_t(size_t size) {
+  static const jint JINT_MAX = 0x7FFFFFFF;
+  return (size > (size_t)JINT_MAX) ? -1 : (jint)size;
+}
+
+
+SWIGINTERN jint SWIG_VectorSize(size_t size) {
+  jint sz = SWIG_JavaIntFromSize_t(size);
+  if (sz == -1)
+    throw std::out_of_range("vector size is too large to fit into a Java int");
+  return sz;
+}
+
+SWIGINTERN std::vector< byte > *new_std_vector_Sl_byte_Sg___SWIG_2(jint count,unsigned char const &value){
+        if (count < 0)
+          throw std::out_of_range("vector count must be positive");
+        return new std::vector< unsigned char >(static_cast<std::vector< unsigned char >::size_type>(count), value);
+      }
+SWIGINTERN jint std_vector_Sl_byte_Sg__doSize(std::vector< byte > const *self){
+        return SWIG_VectorSize(self->size());
+      }
+SWIGINTERN void std_vector_Sl_byte_Sg__doAdd__SWIG_0(std::vector< byte > *self,std::vector< unsigned char >::value_type const &x){
+        self->push_back(x);
+      }
+SWIGINTERN void std_vector_Sl_byte_Sg__doAdd__SWIG_1(std::vector< byte > *self,jint index,std::vector< unsigned char >::value_type const &x){
+        jint size = static_cast<jint>(self->size());
+        if (0 <= index && index <= size) {
+          self->insert(self->begin() + index, x);
+        } else {
+          throw std::out_of_range("vector index out of range");
+        }
+      }
+SWIGINTERN std::vector< unsigned char >::value_type std_vector_Sl_byte_Sg__doRemove(std::vector< byte > *self,jint index){
+        jint size = static_cast<jint>(self->size());
+        if (0 <= index && index < size) {
+          unsigned char const old_value = (*self)[index];
+          self->erase(self->begin() + index);
+          return old_value;
+        } else {
+          throw std::out_of_range("vector index out of range");
+        }
+      }
+SWIGINTERN std::vector< unsigned char >::value_type const &std_vector_Sl_byte_Sg__doGet(std::vector< byte > *self,jint index){
+        jint size = static_cast<jint>(self->size());
+        if (index >= 0 && index < size)
+          return (*self)[index];
+        else
+          throw std::out_of_range("vector index out of range");
+      }
+SWIGINTERN std::vector< unsigned char >::value_type std_vector_Sl_byte_Sg__doSet(std::vector< byte > *self,jint index,std::vector< unsigned char >::value_type const &val){
+        jint size = static_cast<jint>(self->size());
+        if (index >= 0 && index < size) {
+          unsigned char const old_value = (*self)[index];
+          (*self)[index] = val;
+          return old_value;
+        }
+        else
+          throw std::out_of_range("vector index out of range");
+      }
+SWIGINTERN void std_vector_Sl_byte_Sg__doRemoveRange(std::vector< byte > *self,jint fromIndex,jint toIndex){
+        jint size = static_cast<jint>(self->size());
+        if (0 <= fromIndex && fromIndex <= toIndex && toIndex <= size) {
+          self->erase(self->begin() + fromIndex, self->begin() + toIndex);
+        } else {
+          throw std::out_of_range("vector index out of range");
+        }
+      }
+SWIGINTERN std::vector< std::vector< byte > > *new_std_vector_Sl_std_vector_Sl_byte_Sg__Sg___SWIG_2(jint count,std::vector< byte > const &value){
+        if (count < 0)
+          throw std::out_of_range("vector count must be positive");
+        return new std::vector< std::vector< byte > >(static_cast<std::vector< std::vector< byte > >::size_type>(count), value);
+      }
+SWIGINTERN jint std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doSize(std::vector< std::vector< byte > > const *self){
+        return SWIG_VectorSize(self->size());
+      }
+SWIGINTERN void std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doAdd__SWIG_0(std::vector< std::vector< byte > > *self,std::vector< std::vector< unsigned char > >::value_type const &x){
+        self->push_back(x);
+      }
+SWIGINTERN void std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doAdd__SWIG_1(std::vector< std::vector< byte > > *self,jint index,std::vector< std::vector< unsigned char > >::value_type const &x){
+        jint size = static_cast<jint>(self->size());
+        if (0 <= index && index <= size) {
+          self->insert(self->begin() + index, x);
+        } else {
+          throw std::out_of_range("vector index out of range");
+        }
+      }
+SWIGINTERN std::vector< std::vector< unsigned char > >::value_type std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doRemove(std::vector< std::vector< byte > > *self,jint index){
+        jint size = static_cast<jint>(self->size());
+        if (0 <= index && index < size) {
+          std::vector< byte > const old_value = (*self)[index];
+          self->erase(self->begin() + index);
+          return old_value;
+        } else {
+          throw std::out_of_range("vector index out of range");
+        }
+      }
+SWIGINTERN std::vector< std::vector< unsigned char > >::value_type const &std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doGet(std::vector< std::vector< byte > > *self,jint index){
+        jint size = static_cast<jint>(self->size());
+        if (index >= 0 && index < size)
+          return (*self)[index];
+        else
+          throw std::out_of_range("vector index out of range");
+      }
+SWIGINTERN std::vector< std::vector< unsigned char > >::value_type std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doSet(std::vector< std::vector< byte > > *self,jint index,std::vector< std::vector< unsigned char > >::value_type const &val){
+        jint size = static_cast<jint>(self->size());
+        if (index >= 0 && index < size) {
+          std::vector< byte > const old_value = (*self)[index];
+          (*self)[index] = val;
+          return old_value;
+        }
+        else
+          throw std::out_of_range("vector index out of range");
+      }
+SWIGINTERN void std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doRemoveRange(std::vector< std::vector< byte > > *self,jint fromIndex,jint toIndex){
+        jint size = static_cast<jint>(self->size());
+        if (0 <= fromIndex && fromIndex <= toIndex && toIndex <= size) {
+          self->erase(self->begin() + fromIndex, self->begin() + toIndex);
+        } else {
+          throw std::out_of_range("vector index out of range");
+        }
+      }
+
   struct FunctorVoidImpl {
     virtual ~FunctorVoidImpl() {}
     virtual void call() = 0;
@@ -927,10 +1077,9 @@ SWIGINTERN std::function< void () > *new_std_function_Sl_void_Sp__SP__Sg___SWIG_
       }
 
 #include "Types.h"
-#include "ActivityModel.h"
 #include "Message.h"
 #include "PhotoMessage.h"
-#include "VideoMessage.h"
+#include "ActivityModel.h"
 #include "IAndroidActivity.h"
 #include "ITaskScheduler.h"
 
@@ -946,9 +1095,6 @@ struct SWIG_null_deleter {
 
 SWIGINTERN std::shared_ptr< SwigAndroidGuide::PhotoMessage > SwigAndroidGuide_PhotoMessage_dynamic_cast(std::shared_ptr< SwigAndroidGuide::Message > arg){
         return std::dynamic_pointer_cast<SwigAndroidGuide::PhotoMessage>(arg);
-    }
-SWIGINTERN std::shared_ptr< SwigAndroidGuide::VideoMessage > SwigAndroidGuide_VideoMessage_dynamic_cast(std::shared_ptr< SwigAndroidGuide::Message > arg){
-        return std::dynamic_pointer_cast<SwigAndroidGuide::VideoMessage>(arg);
     }
 
 
@@ -1033,7 +1179,7 @@ SwigDirector_IAndroidActivity::~SwigDirector_IAndroidActivity() {
 }
 
 
-void SwigDirector_IAndroidActivity::showToast(std::shared_ptr< std::string > text) {
+void SwigDirector_IAndroidActivity::showToast(std::string text) {
   JNIEnvWrapper swigjnienv(this) ;
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
@@ -1045,16 +1191,8 @@ void SwigDirector_IAndroidActivity::showToast(std::shared_ptr< std::string > tex
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    {
-      if (!text)
-      {
-        jtext = nullptr;
-      }
-      else
-      {
-        jtext = jenv->NewStringUTF((text)->c_str());
-      }
-    }
+    jtext = jenv->NewStringUTF((&text)->c_str());
+    Swig::LocalRefGuard text_refguard(jenv, jtext); 
     jenv->CallStaticVoidMethod(Swig::jclass_SwigAndroidGuideJNI, Swig::director_method_ids[1], swigjobj, jtext);
     jthrowable swigerror = jenv->ExceptionOccurred();
     if (swigerror) {
@@ -1342,6 +1480,558 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 }
 
 
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1VectorByte_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  std::vector< byte > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (std::vector< byte > *)new std::vector< byte >();
+  *(std::vector< byte > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1VectorByte_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  std::vector< byte > *arg1 = 0 ;
+  std::vector< byte > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< byte > **)&jarg1;
+  if (!arg1) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::vector< byte > const & reference is null");
+    return 0;
+  } 
+  result = (std::vector< byte > *)new std::vector< byte >((std::vector< byte > const &)*arg1);
+  *(std::vector< byte > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorByte_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  std::vector< byte > *arg1 = (std::vector< byte > *) 0 ;
+  std::vector< unsigned char >::size_type result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< byte > **)&jarg1; 
+  result = ((std::vector< byte > const *)arg1)->capacity();
+  jresult = (jlong)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorByte_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+  std::vector< byte > *arg1 = (std::vector< byte > *) 0 ;
+  std::vector< unsigned char >::size_type arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< byte > **)&jarg1; 
+  arg2 = (std::vector< unsigned char >::size_type)jarg2; 
+  try {
+    (arg1)->reserve(arg2);
+  } catch(std::length_error &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorByte_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jboolean jresult = 0 ;
+  std::vector< byte > *arg1 = (std::vector< byte > *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< byte > **)&jarg1; 
+  result = (bool)((std::vector< byte > const *)arg1)->empty();
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorByte_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  std::vector< byte > *arg1 = (std::vector< byte > *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< byte > **)&jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1VectorByte_1_1SWIG_12(JNIEnv *jenv, jclass jcls, jint jarg1, jshort jarg2) {
+  jlong jresult = 0 ;
+  jint arg1 ;
+  unsigned char *arg2 = 0 ;
+  unsigned char temp2 ;
+  std::vector< byte > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = jarg1; 
+  temp2 = (unsigned char)jarg2; 
+  arg2 = &temp2; 
+  try {
+    result = (std::vector< byte > *)new_std_vector_Sl_byte_Sg___SWIG_2(arg1,(unsigned char const &)*arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return 0;
+  }
+  *(std::vector< byte > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorByte_1doSize(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  std::vector< byte > *arg1 = (std::vector< byte > *) 0 ;
+  jint result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< byte > **)&jarg1; 
+  try {
+    result = std_vector_Sl_byte_Sg__doSize((std::vector< unsigned char > const *)arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return 0;
+  }
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorByte_1doAdd_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jshort jarg2) {
+  std::vector< byte > *arg1 = (std::vector< byte > *) 0 ;
+  std::vector< unsigned char >::value_type *arg2 = 0 ;
+  std::vector< unsigned char >::value_type temp2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< byte > **)&jarg1; 
+  temp2 = (std::vector< unsigned char >::value_type)jarg2; 
+  arg2 = &temp2; 
+  std_vector_Sl_byte_Sg__doAdd__SWIG_0(arg1,(unsigned char const &)*arg2);
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorByte_1doAdd_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jshort jarg3) {
+  std::vector< byte > *arg1 = (std::vector< byte > *) 0 ;
+  jint arg2 ;
+  std::vector< unsigned char >::value_type *arg3 = 0 ;
+  std::vector< unsigned char >::value_type temp3 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< byte > **)&jarg1; 
+  arg2 = jarg2; 
+  temp3 = (std::vector< unsigned char >::value_type)jarg3; 
+  arg3 = &temp3; 
+  try {
+    std_vector_Sl_byte_Sg__doAdd__SWIG_1(arg1,arg2,(unsigned char const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT jshort JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorByte_1doRemove(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jshort jresult = 0 ;
+  std::vector< byte > *arg1 = (std::vector< byte > *) 0 ;
+  jint arg2 ;
+  std::vector< unsigned char >::value_type result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< byte > **)&jarg1; 
+  arg2 = jarg2; 
+  try {
+    result = (std::vector< unsigned char >::value_type)std_vector_Sl_byte_Sg__doRemove(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return 0;
+  }
+  jresult = (jshort)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jshort JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorByte_1doGet(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jshort jresult = 0 ;
+  std::vector< byte > *arg1 = (std::vector< byte > *) 0 ;
+  jint arg2 ;
+  std::vector< unsigned char >::value_type *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< byte > **)&jarg1; 
+  arg2 = jarg2; 
+  try {
+    result = (std::vector< unsigned char >::value_type *) &std_vector_Sl_byte_Sg__doGet(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return 0;
+  }
+  jresult = (jshort)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jshort JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorByte_1doSet(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jshort jarg3) {
+  jshort jresult = 0 ;
+  std::vector< byte > *arg1 = (std::vector< byte > *) 0 ;
+  jint arg2 ;
+  std::vector< unsigned char >::value_type *arg3 = 0 ;
+  std::vector< unsigned char >::value_type temp3 ;
+  std::vector< unsigned char >::value_type result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< byte > **)&jarg1; 
+  arg2 = jarg2; 
+  temp3 = (std::vector< unsigned char >::value_type)jarg3; 
+  arg3 = &temp3; 
+  try {
+    result = (std::vector< unsigned char >::value_type)std_vector_Sl_byte_Sg__doSet(arg1,arg2,(unsigned char const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return 0;
+  }
+  jresult = (jshort)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorByte_1doRemoveRange(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3) {
+  std::vector< byte > *arg1 = (std::vector< byte > *) 0 ;
+  jint arg2 ;
+  jint arg3 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< byte > **)&jarg1; 
+  arg2 = jarg2; 
+  arg3 = jarg3; 
+  try {
+    std_vector_Sl_byte_Sg__doRemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1VectorByte(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  std::vector< byte > *arg1 = (std::vector< byte > *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(std::vector< byte > **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1VectorVectorByte_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  std::vector< std::vector< byte > > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (std::vector< std::vector< byte > > *)new std::vector< std::vector< byte > >();
+  *(std::vector< std::vector< byte > > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1VectorVectorByte_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  std::vector< std::vector< byte > > *arg1 = 0 ;
+  std::vector< std::vector< byte > > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1;
+  if (!arg1) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::vector< std::vector< byte > > const & reference is null");
+    return 0;
+  } 
+  result = (std::vector< std::vector< byte > > *)new std::vector< std::vector< byte > >((std::vector< std::vector< byte > > const &)*arg1);
+  *(std::vector< std::vector< byte > > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorVectorByte_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  std::vector< std::vector< byte > > *arg1 = (std::vector< std::vector< byte > > *) 0 ;
+  std::vector< std::vector< unsigned char > >::size_type result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1; 
+  result = ((std::vector< std::vector< byte > > const *)arg1)->capacity();
+  jresult = (jlong)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorVectorByte_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+  std::vector< std::vector< byte > > *arg1 = (std::vector< std::vector< byte > > *) 0 ;
+  std::vector< std::vector< unsigned char > >::size_type arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1; 
+  arg2 = (std::vector< std::vector< unsigned char > >::size_type)jarg2; 
+  try {
+    (arg1)->reserve(arg2);
+  } catch(std::length_error &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorVectorByte_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jboolean jresult = 0 ;
+  std::vector< std::vector< byte > > *arg1 = (std::vector< std::vector< byte > > *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1; 
+  result = (bool)((std::vector< std::vector< byte > > const *)arg1)->empty();
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorVectorByte_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  std::vector< std::vector< byte > > *arg1 = (std::vector< std::vector< byte > > *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1VectorVectorByte_1_1SWIG_12(JNIEnv *jenv, jclass jcls, jint jarg1, jlong jarg2, jobject jarg2_) {
+  jlong jresult = 0 ;
+  jint arg1 ;
+  std::vector< byte > *arg2 = 0 ;
+  std::vector< std::vector< byte > > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg2_;
+  arg1 = jarg1; 
+  arg2 = *(std::vector< byte > **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::vector< byte > const & reference is null");
+    return 0;
+  } 
+  try {
+    result = (std::vector< std::vector< byte > > *)new_std_vector_Sl_std_vector_Sl_byte_Sg__Sg___SWIG_2(arg1,(std::vector< unsigned char > const &)*arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return 0;
+  }
+  *(std::vector< std::vector< byte > > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorVectorByte_1doSize(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  std::vector< std::vector< byte > > *arg1 = (std::vector< std::vector< byte > > *) 0 ;
+  jint result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1; 
+  try {
+    result = std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doSize((std::vector< std::vector< unsigned char > > const *)arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return 0;
+  }
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorVectorByte_1doAdd_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  std::vector< std::vector< byte > > *arg1 = (std::vector< std::vector< byte > > *) 0 ;
+  std::vector< std::vector< unsigned char > >::value_type *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1; 
+  arg2 = *(std::vector< std::vector< unsigned char > >::value_type **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::vector< std::vector< unsigned char > >::value_type const & reference is null");
+    return ;
+  } 
+  std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doAdd__SWIG_0(arg1,(std::vector< unsigned char > const &)*arg2);
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorVectorByte_1doAdd_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_) {
+  std::vector< std::vector< byte > > *arg1 = (std::vector< std::vector< byte > > *) 0 ;
+  jint arg2 ;
+  std::vector< std::vector< unsigned char > >::value_type *arg3 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg3_;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1; 
+  arg2 = jarg2; 
+  arg3 = *(std::vector< std::vector< unsigned char > >::value_type **)&jarg3;
+  if (!arg3) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::vector< std::vector< unsigned char > >::value_type const & reference is null");
+    return ;
+  } 
+  try {
+    std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doAdd__SWIG_1(arg1,arg2,(std::vector< unsigned char > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorVectorByte_1doRemove(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jlong jresult = 0 ;
+  std::vector< std::vector< byte > > *arg1 = (std::vector< std::vector< byte > > *) 0 ;
+  jint arg2 ;
+  std::vector< std::vector< unsigned char > >::value_type result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1; 
+  arg2 = jarg2; 
+  try {
+    result = std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doRemove(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return 0;
+  }
+  *(std::vector< std::vector< unsigned char > >::value_type **)&jresult = new std::vector< std::vector< unsigned char > >::value_type((const std::vector< std::vector< unsigned char > >::value_type &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorVectorByte_1doGet(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jlong jresult = 0 ;
+  std::vector< std::vector< byte > > *arg1 = (std::vector< std::vector< byte > > *) 0 ;
+  jint arg2 ;
+  std::vector< std::vector< unsigned char > >::value_type *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1; 
+  arg2 = jarg2; 
+  try {
+    result = (std::vector< std::vector< unsigned char > >::value_type *) &std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doGet(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return 0;
+  }
+  *(std::vector< std::vector< unsigned char > >::value_type **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorVectorByte_1doSet(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_) {
+  jlong jresult = 0 ;
+  std::vector< std::vector< byte > > *arg1 = (std::vector< std::vector< byte > > *) 0 ;
+  jint arg2 ;
+  std::vector< std::vector< unsigned char > >::value_type *arg3 = 0 ;
+  std::vector< std::vector< unsigned char > >::value_type result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg3_;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1; 
+  arg2 = jarg2; 
+  arg3 = *(std::vector< std::vector< unsigned char > >::value_type **)&jarg3;
+  if (!arg3) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::vector< std::vector< unsigned char > >::value_type const & reference is null");
+    return 0;
+  } 
+  try {
+    result = std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doSet(arg1,arg2,(std::vector< unsigned char > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return 0;
+  }
+  *(std::vector< std::vector< unsigned char > >::value_type **)&jresult = new std::vector< std::vector< unsigned char > >::value_type((const std::vector< std::vector< unsigned char > >::value_type &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VectorVectorByte_1doRemoveRange(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3) {
+  std::vector< std::vector< byte > > *arg1 = (std::vector< std::vector< byte > > *) 0 ;
+  jint arg2 ;
+  jint arg3 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1; 
+  arg2 = jarg2; 
+  arg3 = jarg3; 
+  try {
+    std_vector_Sl_std_vector_Sl_byte_Sg__Sg__doRemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1VectorVectorByte(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  std::vector< std::vector< byte > > *arg1 = (std::vector< std::vector< byte > > *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(std::vector< std::vector< byte > > **)&jarg1; 
+  delete arg1;
+}
+
+
 SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1FunctorVoidImpl(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   FunctorVoidImpl *arg1 = (FunctorVoidImpl *) 0 ;
   
@@ -1464,6 +2154,190 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 }
 
 
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1Message(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  (void)arg1; delete smartarg1;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1getId(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (int)(arg1)->getId();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1setId(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  int arg2 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (int)jarg2; 
+  (arg1)->setId(arg2);
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1getText(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+  std::shared_ptr< std::string > result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (arg1)->getText();
+  {
+    return convertStringFromCppToJava(jenv, result);
+  }
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1setText(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  std::shared_ptr< std::string > arg2 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  {
+    arg2 = convertStringFromJavaToCpp(jenv, jarg2);
+  }
+  (arg1)->setText(arg2);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1Message(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  SwigAndroidGuide::Message *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (SwigAndroidGuide::Message *)new SwigAndroidGuide::Message();
+  
+  *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jresult = result ? new std::shared_ptr<  SwigAndroidGuide::Message >(result SWIG_NO_NULL_DELETER_1) : 0;
+  
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_PhotoMessage_1getPhotoData(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  SwigAndroidGuide::PhotoMessage *arg1 = (SwigAndroidGuide::PhotoMessage *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::PhotoMessage > *smartarg1 = 0 ;
+  std::vector< byte > result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::PhotoMessage > **)&jarg1;
+  arg1 = (SwigAndroidGuide::PhotoMessage *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (arg1)->getPhotoData();
+  *(std::vector< byte > **)&jresult = new std::vector< byte >((const std::vector< byte > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_PhotoMessage_1setPhotoData(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  SwigAndroidGuide::PhotoMessage *arg1 = (SwigAndroidGuide::PhotoMessage *) 0 ;
+  std::vector< byte > arg2 ;
+  std::shared_ptr< SwigAndroidGuide::PhotoMessage > *smartarg1 = 0 ;
+  std::vector< byte > *argp2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::PhotoMessage > **)&jarg1;
+  arg1 = (SwigAndroidGuide::PhotoMessage *)(smartarg1 ? smartarg1->get() : 0); 
+  argp2 = *(std::vector< byte > **)&jarg2; 
+  if (!argp2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Attempt to dereference null std::vector< byte >");
+    return ;
+  }
+  arg2 = *argp2; 
+  (arg1)->setPhotoData(arg2);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_PhotoMessage_1dynamic_1cast(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  std::shared_ptr< SwigAndroidGuide::Message > arg1 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *argp1 ;
+  std::shared_ptr< SwigAndroidGuide::PhotoMessage > result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  argp1 = *(std::shared_ptr< SwigAndroidGuide::Message > **)&jarg1;
+  if (argp1) arg1 = *argp1; 
+  result = SwigAndroidGuide_PhotoMessage_dynamic_cast(arg1);
+  *(std::shared_ptr< SwigAndroidGuide::PhotoMessage > **)&jresult = result ? new std::shared_ptr< SwigAndroidGuide::PhotoMessage >(result) : 0; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1PhotoMessage(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  SwigAndroidGuide::PhotoMessage *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (SwigAndroidGuide::PhotoMessage *)new SwigAndroidGuide::PhotoMessage();
+  
+  *(std::shared_ptr<  SwigAndroidGuide::PhotoMessage > **)&jresult = result ? new std::shared_ptr<  SwigAndroidGuide::PhotoMessage >(result SWIG_NO_NULL_DELETER_1) : 0;
+  
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1PhotoMessage(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  SwigAndroidGuide::PhotoMessage *arg1 = (SwigAndroidGuide::PhotoMessage *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::PhotoMessage > *smartarg1 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::PhotoMessage > **)&jarg1;
+  arg1 = (SwigAndroidGuide::PhotoMessage *)(smartarg1 ? smartarg1->get() : 0); 
+  (void)arg1; delete smartarg1;
+}
+
+
 SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_ActivityModel_1onCreate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
   SwigAndroidGuide::ActivityModel *arg1 = (SwigAndroidGuide::ActivityModel *) 0 ;
   SwigAndroidGuide::IAndroidActivity *arg2 = (SwigAndroidGuide::IAndroidActivity *) 0 ;
@@ -1565,351 +2439,6 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1Message(JNIEnv *jenv, jclass jcls, jint jarg1, jstring jarg2) {
-  jlong jresult = 0 ;
-  int arg1 ;
-  std::shared_ptr< std::string > arg2 ;
-  SwigAndroidGuide::Message *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  arg1 = (int)jarg1; 
-  {
-    //actual JNI call:
-    //const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
-    
-    const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
-    if (!psz_string)
-    {
-      arg2 = nullptr;
-    }
-    else
-    {
-      arg2 = std::make_shared<std::string>(psz_string);
-      
-      //psz_string needs to be released using jenv->ReleaseStringUTFChars(jarg2, psz_string);
-      jenv->ReleaseStringUTFChars(jarg2, psz_string);
-    }
-  }
-  result = (SwigAndroidGuide::Message *)new SwigAndroidGuide::Message(arg1,arg2);
-  
-  *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jresult = result ? new std::shared_ptr<  SwigAndroidGuide::Message >(result SWIG_NO_NULL_DELETER_1) : 0;
-  
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1Message(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
-  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  
-  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
-  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
-  (void)arg1; delete smartarg1;
-}
-
-
-SWIGEXPORT jint JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1getId(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jint jresult = 0 ;
-  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
-  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
-  int result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  
-  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
-  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
-  result = (int)(arg1)->getId();
-  jresult = (jint)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1setId(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
-  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
-  int arg2 ;
-  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  
-  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
-  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
-  arg2 = (int)jarg2; 
-  (arg1)->setId(arg2);
-}
-
-
-SWIGEXPORT jstring JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1getText(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jstring jresult = 0 ;
-  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
-  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
-  std::shared_ptr< std::string > result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  
-  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
-  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
-  result = (arg1)->getText();
-  {
-    if (!result)
-    {
-      return nullptr;
-    }
-    
-    //actual JNI call:
-    //return jenv->NewStringUTF((result)->c_str());
-    
-    return jenv->NewStringUTF((result)->c_str());
-  }
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1setText(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
-  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
-  std::shared_ptr< std::string > arg2 ;
-  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  
-  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
-  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
-  {
-    //actual JNI call:
-    //const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
-    
-    const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
-    if (!psz_string)
-    {
-      arg2 = nullptr;
-    }
-    else
-    {
-      arg2 = std::make_shared<std::string>(psz_string);
-      
-      //psz_string needs to be released using jenv->ReleaseStringUTFChars(jarg2, psz_string);
-      jenv->ReleaseStringUTFChars(jarg2, psz_string);
-    }
-  }
-  (arg1)->setText(arg2);
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1PhotoMessage(JNIEnv *jenv, jclass jcls, jint jarg1, jstring jarg2) {
-  jlong jresult = 0 ;
-  int arg1 ;
-  std::shared_ptr< std::string > arg2 ;
-  SwigAndroidGuide::PhotoMessage *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  arg1 = (int)jarg1; 
-  {
-    //actual JNI call:
-    //const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
-    
-    const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
-    if (!psz_string)
-    {
-      arg2 = nullptr;
-    }
-    else
-    {
-      arg2 = std::make_shared<std::string>(psz_string);
-      
-      //psz_string needs to be released using jenv->ReleaseStringUTFChars(jarg2, psz_string);
-      jenv->ReleaseStringUTFChars(jarg2, psz_string);
-    }
-  }
-  result = (SwigAndroidGuide::PhotoMessage *)new SwigAndroidGuide::PhotoMessage(arg1,arg2);
-  
-  *(std::shared_ptr<  SwigAndroidGuide::PhotoMessage > **)&jresult = result ? new std::shared_ptr<  SwigAndroidGuide::PhotoMessage >(result SWIG_NO_NULL_DELETER_1) : 0;
-  
-  return jresult;
-}
-
-
-SWIGEXPORT jbyteArray JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_PhotoMessage_1getPhotoData(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jbyteArray jresult = 0 ;
-  SwigAndroidGuide::PhotoMessage *arg1 = (SwigAndroidGuide::PhotoMessage *) 0 ;
-  std::shared_ptr< SwigAndroidGuide::PhotoMessage > *smartarg1 = 0 ;
-  SwigValueWrapper< std::shared_ptr< std::vector< unsigned char > > > result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  
-  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::PhotoMessage > **)&jarg1;
-  arg1 = (SwigAndroidGuide::PhotoMessage *)(smartarg1 ? smartarg1->get() : 0); 
-  result = (arg1)->getPhotoData();
-  {
-    jresult = convertArrayOfBytesFromCppToJava(jenv, result);
-  }
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_PhotoMessage_1setPhotoData(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jbyteArray jarg2) {
-  SwigAndroidGuide::PhotoMessage *arg1 = (SwigAndroidGuide::PhotoMessage *) 0 ;
-  SwigValueWrapper< std::shared_ptr< std::vector< unsigned char > > > arg2 ;
-  std::shared_ptr< SwigAndroidGuide::PhotoMessage > *smartarg1 = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  
-  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::PhotoMessage > **)&jarg1;
-  arg1 = (SwigAndroidGuide::PhotoMessage *)(smartarg1 ? smartarg1->get() : 0); 
-  {
-    arg2 = convertArrayOfBytesFromJavaToCpp(jenv, jarg2);
-  }
-  (arg1)->setPhotoData(arg2);
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_PhotoMessage_1dynamic_1cast(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  std::shared_ptr< SwigAndroidGuide::Message > arg1 ;
-  std::shared_ptr< SwigAndroidGuide::Message > *argp1 ;
-  std::shared_ptr< SwigAndroidGuide::PhotoMessage > result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  argp1 = *(std::shared_ptr< SwigAndroidGuide::Message > **)&jarg1;
-  if (argp1) arg1 = *argp1; 
-  result = SwigAndroidGuide_PhotoMessage_dynamic_cast(arg1);
-  *(std::shared_ptr< SwigAndroidGuide::PhotoMessage > **)&jresult = result ? new std::shared_ptr< SwigAndroidGuide::PhotoMessage >(result) : 0; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1PhotoMessage(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  SwigAndroidGuide::PhotoMessage *arg1 = (SwigAndroidGuide::PhotoMessage *) 0 ;
-  std::shared_ptr< SwigAndroidGuide::PhotoMessage > *smartarg1 = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  
-  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::PhotoMessage > **)&jarg1;
-  arg1 = (SwigAndroidGuide::PhotoMessage *)(smartarg1 ? smartarg1->get() : 0); 
-  (void)arg1; delete smartarg1;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1VideoMessage(JNIEnv *jenv, jclass jcls, jint jarg1, jstring jarg2) {
-  jlong jresult = 0 ;
-  int arg1 ;
-  std::shared_ptr< std::string > arg2 ;
-  SwigAndroidGuide::VideoMessage *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  arg1 = (int)jarg1; 
-  {
-    //actual JNI call:
-    //const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
-    
-    const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
-    if (!psz_string)
-    {
-      arg2 = nullptr;
-    }
-    else
-    {
-      arg2 = std::make_shared<std::string>(psz_string);
-      
-      //psz_string needs to be released using jenv->ReleaseStringUTFChars(jarg2, psz_string);
-      jenv->ReleaseStringUTFChars(jarg2, psz_string);
-    }
-  }
-  result = (SwigAndroidGuide::VideoMessage *)new SwigAndroidGuide::VideoMessage(arg1,arg2);
-  
-  *(std::shared_ptr<  SwigAndroidGuide::VideoMessage > **)&jresult = result ? new std::shared_ptr<  SwigAndroidGuide::VideoMessage >(result SWIG_NO_NULL_DELETER_1) : 0;
-  
-  return jresult;
-}
-
-
-SWIGEXPORT jobjectArray JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VideoMessage_1getVideoChunks(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jobjectArray jresult = 0 ;
-  SwigAndroidGuide::VideoMessage *arg1 = (SwigAndroidGuide::VideoMessage *) 0 ;
-  std::shared_ptr< SwigAndroidGuide::VideoMessage > *smartarg1 = 0 ;
-  shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  
-  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::VideoMessage > **)&jarg1;
-  arg1 = (SwigAndroidGuide::VideoMessage *)(smartarg1 ? smartarg1->get() : 0); 
-  result = (arg1)->getVideoChunks();
-  {
-    jresult = convertArrayOfArraysOfByteFromCppToJava(jenv, result);
-  }
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VideoMessage_1setVideoChunks(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jobjectArray jarg2) {
-  SwigAndroidGuide::VideoMessage *arg1 = (SwigAndroidGuide::VideoMessage *) 0 ;
-  shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes arg2 ;
-  std::shared_ptr< SwigAndroidGuide::VideoMessage > *smartarg1 = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  
-  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::VideoMessage > **)&jarg1;
-  arg1 = (SwigAndroidGuide::VideoMessage *)(smartarg1 ? smartarg1->get() : 0); 
-  {
-    arg2 = convertArrayOfArraysOfByteFromJavaToCpp(jenv, jarg2);
-  }
-  (arg1)->setVideoChunks(arg2);
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VideoMessage_1dynamic_1cast(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  std::shared_ptr< SwigAndroidGuide::Message > arg1 ;
-  std::shared_ptr< SwigAndroidGuide::Message > *argp1 ;
-  std::shared_ptr< SwigAndroidGuide::VideoMessage > result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  argp1 = *(std::shared_ptr< SwigAndroidGuide::Message > **)&jarg1;
-  if (argp1) arg1 = *argp1; 
-  result = SwigAndroidGuide_VideoMessage_dynamic_cast(arg1);
-  *(std::shared_ptr< SwigAndroidGuide::VideoMessage > **)&jresult = result ? new std::shared_ptr< SwigAndroidGuide::VideoMessage >(result) : 0; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1VideoMessage(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  SwigAndroidGuide::VideoMessage *arg1 = (SwigAndroidGuide::VideoMessage *) 0 ;
-  std::shared_ptr< SwigAndroidGuide::VideoMessage > *smartarg1 = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  
-  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::VideoMessage > **)&jarg1;
-  arg1 = (SwigAndroidGuide::VideoMessage *)(smartarg1 ? smartarg1->get() : 0); 
-  (void)arg1; delete smartarg1;
-}
-
-
 SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_delete_1IAndroidActivity(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   SwigAndroidGuide::IAndroidActivity *arg1 = (SwigAndroidGuide::IAndroidActivity *) 0 ;
   
@@ -1922,29 +2451,20 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 
 SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_IAndroidActivity_1showToast(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
   SwigAndroidGuide::IAndroidActivity *arg1 = (SwigAndroidGuide::IAndroidActivity *) 0 ;
-  std::shared_ptr< std::string > arg2 ;
+  std::string arg2 ;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
   arg1 = *(SwigAndroidGuide::IAndroidActivity **)&jarg1; 
-  {
-    //actual JNI call:
-    //const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
-    
-    const char *psz_string = jenv->GetStringUTFChars(jarg2, NULL);
-    if (!psz_string)
-    {
-      arg2 = nullptr;
-    }
-    else
-    {
-      arg2 = std::make_shared<std::string>(psz_string);
-      
-      //psz_string needs to be released using jenv->ReleaseStringUTFChars(jarg2, psz_string);
-      jenv->ReleaseStringUTFChars(jarg2, psz_string);
-    }
-  }
+  if(!jarg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
+    return ;
+  } 
+  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+  if (!arg2_pstr) return ;
+  (&arg2)->assign(arg2_pstr);
+  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
   (arg1)->showToast(arg2);
 }
 
@@ -2117,16 +2637,6 @@ SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAn
     (void)jenv;
     (void)jcls;
     argp1 = *(std::shared_ptr< SwigAndroidGuide::PhotoMessage > **)&jarg1;
-    *(std::shared_ptr< SwigAndroidGuide::Message > **)&baseptr = argp1 ? new std::shared_ptr< SwigAndroidGuide::Message >(*argp1) : 0;
-    return baseptr;
-}
-
-SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_VideoMessage_1SWIGSmartPtrUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-    jlong baseptr = 0;
-    std::shared_ptr< SwigAndroidGuide::VideoMessage > *argp1;
-    (void)jenv;
-    (void)jcls;
-    argp1 = *(std::shared_ptr< SwigAndroidGuide::VideoMessage > **)&jarg1;
     *(std::shared_ptr< SwigAndroidGuide::Message > **)&baseptr = argp1 ? new std::shared_ptr< SwigAndroidGuide::Message >(*argp1) : 0;
     return baseptr;
 }

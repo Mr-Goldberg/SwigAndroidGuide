@@ -43,21 +43,21 @@ public class PhotoMessage extends Message {
     super.delete();
   }
 
-  public PhotoMessage(int id, java.lang.String text) {
-    this(SwigAndroidGuideJNI.new_PhotoMessage(id, text), true);
+  public VectorByte getPhotoData() {
+    return new VectorByte(SwigAndroidGuideJNI.PhotoMessage_getPhotoData(swigCPtr, this), true);
   }
 
-  public byte[] getPhotoData() {
-     return SwigAndroidGuideJNI.PhotoMessage_getPhotoData(swigCPtr, this);
-}
-
-  public void setPhotoData(byte[] photoData) {
-    SwigAndroidGuideJNI.PhotoMessage_setPhotoData(swigCPtr, this, photoData);
+  public void setPhotoData(VectorByte photoData) {
+    SwigAndroidGuideJNI.PhotoMessage_setPhotoData(swigCPtr, this, VectorByte.getCPtr(photoData), photoData);
   }
 
   public static PhotoMessage dynamic_cast(Message arg) {
     long cPtr = SwigAndroidGuideJNI.PhotoMessage_dynamic_cast(Message.getCPtr(arg), arg);
     return (cPtr == 0) ? null : new PhotoMessage(cPtr, true);
+  }
+
+  public PhotoMessage() {
+    this(SwigAndroidGuideJNI.new_PhotoMessage(), true);
   }
 
 }

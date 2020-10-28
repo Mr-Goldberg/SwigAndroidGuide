@@ -12,7 +12,7 @@ import com.goldberg.swigandroidguide.swiggenerated.IAndroidActivity;
 import com.goldberg.swigandroidguide.swiggenerated.ITaskScheduler;
 import com.goldberg.swigandroidguide.swiggenerated.Message;
 import com.goldberg.swigandroidguide.swiggenerated.PhotoMessage;
-import com.goldberg.swigandroidguide.swiggenerated.VideoMessage;
+import com.goldberg.swigandroidguide.swiggenerated.VectorByte;
 
 import java.util.Locale;
 
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void showToast(String text)
         {
+            Log.d(TAG, "showToast() Will show toast with text: " + text);
             Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
         }
 
@@ -43,17 +44,16 @@ public class MainActivity extends AppCompatActivity
             PhotoMessage photoMessage = PhotoMessage.dynamic_cast(message);
             if (photoMessage != null)
             {
-                Log.d(TAG, String.format(Locale.US, "Photo message sent: '%d %s, %d bytes'",
-                        photoMessage.getId(), photoMessage.getText(), photoMessage.getPhotoData().length));
+                VectorByte data = photoMessage.getPhotoData();
+                String dataString = "";
+                for (int i = 0; i < data.size(); ++i)
+                {
+                    dataString += data.get(i).toString() + " ";
+                }
 
-                return;
-            }
-
-            VideoMessage videoMessage = VideoMessage.dynamic_cast(message);
-            if (videoMessage != null)
-            {
-                Log.d(TAG, String.format(Locale.US, "Photo message sent: '%d %s, %d chunks'",
-                        videoMessage.getId(), videoMessage.getText(), videoMessage.getVideoChunks().length));
+                Log.d(TAG, String.format(Locale.US,
+                        "Photo message sent: '%d %s' with bytes: '%s'",
+                        message.getId(), message.getText(), dataString));
 
                 return;
             }

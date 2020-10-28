@@ -13,6 +13,36 @@ public class SwigAndroidGuideJNI {
   public final static native void delete_shared_ptr_to_string(long jarg1);
   public final static native long new_shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes();
   public final static native void delete_shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes(long jarg1);
+  public final static native long new_VectorByte__SWIG_0();
+  public final static native long new_VectorByte__SWIG_1(long jarg1, VectorByte jarg1_);
+  public final static native long VectorByte_capacity(long jarg1, VectorByte jarg1_);
+  public final static native void VectorByte_reserve(long jarg1, VectorByte jarg1_, long jarg2);
+  public final static native boolean VectorByte_isEmpty(long jarg1, VectorByte jarg1_);
+  public final static native void VectorByte_clear(long jarg1, VectorByte jarg1_);
+  public final static native long new_VectorByte__SWIG_2(int jarg1, short jarg2);
+  public final static native int VectorByte_doSize(long jarg1, VectorByte jarg1_);
+  public final static native void VectorByte_doAdd__SWIG_0(long jarg1, VectorByte jarg1_, short jarg2);
+  public final static native void VectorByte_doAdd__SWIG_1(long jarg1, VectorByte jarg1_, int jarg2, short jarg3);
+  public final static native short VectorByte_doRemove(long jarg1, VectorByte jarg1_, int jarg2);
+  public final static native short VectorByte_doGet(long jarg1, VectorByte jarg1_, int jarg2);
+  public final static native short VectorByte_doSet(long jarg1, VectorByte jarg1_, int jarg2, short jarg3);
+  public final static native void VectorByte_doRemoveRange(long jarg1, VectorByte jarg1_, int jarg2, int jarg3);
+  public final static native void delete_VectorByte(long jarg1);
+  public final static native long new_VectorVectorByte__SWIG_0();
+  public final static native long new_VectorVectorByte__SWIG_1(long jarg1, VectorVectorByte jarg1_);
+  public final static native long VectorVectorByte_capacity(long jarg1, VectorVectorByte jarg1_);
+  public final static native void VectorVectorByte_reserve(long jarg1, VectorVectorByte jarg1_, long jarg2);
+  public final static native boolean VectorVectorByte_isEmpty(long jarg1, VectorVectorByte jarg1_);
+  public final static native void VectorVectorByte_clear(long jarg1, VectorVectorByte jarg1_);
+  public final static native long new_VectorVectorByte__SWIG_2(int jarg1, long jarg2, VectorByte jarg2_);
+  public final static native int VectorVectorByte_doSize(long jarg1, VectorVectorByte jarg1_);
+  public final static native void VectorVectorByte_doAdd__SWIG_0(long jarg1, VectorVectorByte jarg1_, long jarg2, VectorByte jarg2_);
+  public final static native void VectorVectorByte_doAdd__SWIG_1(long jarg1, VectorVectorByte jarg1_, int jarg2, long jarg3, VectorByte jarg3_);
+  public final static native long VectorVectorByte_doRemove(long jarg1, VectorVectorByte jarg1_, int jarg2);
+  public final static native long VectorVectorByte_doGet(long jarg1, VectorVectorByte jarg1_, int jarg2);
+  public final static native long VectorVectorByte_doSet(long jarg1, VectorVectorByte jarg1_, int jarg2, long jarg3, VectorByte jarg3_);
+  public final static native void VectorVectorByte_doRemoveRange(long jarg1, VectorVectorByte jarg1_, int jarg2, int jarg3);
+  public final static native void delete_VectorVectorByte(long jarg1);
   public final static native void delete_FunctorVoidImpl(long jarg1);
   public final static native void FunctorVoidImpl_call(long jarg1, FunctorVoidImpl jarg1_);
   public final static native long new_FunctorVoidImpl();
@@ -23,6 +53,17 @@ public class SwigAndroidGuideJNI {
   public final static native long new_FunctorVoid__SWIG_1(long jarg1);
   public final static native long new_FunctorVoid__SWIG_2(long jarg1, FunctorVoidImpl jarg1_);
   public final static native void delete_FunctorVoid(long jarg1);
+  public final static native void delete_Message(long jarg1);
+  public final static native int Message_getId(long jarg1, Message jarg1_);
+  public final static native void Message_setId(long jarg1, Message jarg1_, int jarg2);
+  public final static native java.lang.String Message_getText(long jarg1, Message jarg1_);
+  public final static native void Message_setText(long jarg1, Message jarg1_, java.lang.String jarg2);
+  public final static native long new_Message();
+  public final static native long PhotoMessage_getPhotoData(long jarg1, PhotoMessage jarg1_);
+  public final static native void PhotoMessage_setPhotoData(long jarg1, PhotoMessage jarg1_, long jarg2, VectorByte jarg2_);
+  public final static native long PhotoMessage_dynamic_cast(long jarg1, Message jarg1_);
+  public final static native long new_PhotoMessage();
+  public final static native void delete_PhotoMessage(long jarg1);
   public final static native void ActivityModel_onCreate(long jarg1, ActivityModel jarg1_, long jarg2, IAndroidActivity jarg2_);
   public final static native void ActivityModel_setMultiplier(long jarg1, ActivityModel jarg1_, int jarg2);
   public final static native int ActivityModel_multiply__SWIG_0(long jarg1, ActivityModel jarg1_, int jarg2);
@@ -30,24 +71,8 @@ public class SwigAndroidGuideJNI {
   public final static native int ActivityModel_decryptMessages(long jarg1, ActivityModel jarg1_, byte[][] jarg2);
   public final static native long new_ActivityModel();
   public final static native void delete_ActivityModel(long jarg1);
-  public final static native long new_Message(int jarg1, java.lang.String jarg2);
-  public final static native void delete_Message(long jarg1);
-  public final static native int Message_getId(long jarg1, Message jarg1_);
-  public final static native void Message_setId(long jarg1, Message jarg1_, int jarg2);
-  public final static native java.lang.String Message_getText(long jarg1, Message jarg1_);
-  public final static native void Message_setText(long jarg1, Message jarg1_, java.lang.String jarg2);
-  public final static native long new_PhotoMessage(int jarg1, java.lang.String jarg2);
-  public final static native byte[] PhotoMessage_getPhotoData(long jarg1, PhotoMessage jarg1_);
-  public final static native void PhotoMessage_setPhotoData(long jarg1, PhotoMessage jarg1_, byte[] jarg2);
-  public final static native long PhotoMessage_dynamic_cast(long jarg1, Message jarg1_);
-  public final static native void delete_PhotoMessage(long jarg1);
-  public final static native long new_VideoMessage(int jarg1, java.lang.String jarg2);
-  public final static native byte[][] VideoMessage_getVideoChunks(long jarg1, VideoMessage jarg1_);
-  public final static native void VideoMessage_setVideoChunks(long jarg1, VideoMessage jarg1_, byte[][] jarg2);
-  public final static native long VideoMessage_dynamic_cast(long jarg1, Message jarg1_);
-  public final static native void delete_VideoMessage(long jarg1);
   public final static native void delete_IAndroidActivity(long jarg1);
-  public final static native void IAndroidActivity_showToast(long jarg1, IAndroidActivity jarg1_, java.lang.String jarg2);
+  public final static native void IAndroidActivity_showToast(long jarg1, IAndroidActivity jarg1_, String jarg2);
   public final static native void IAndroidActivity_sendMessage(long jarg1, IAndroidActivity jarg1_, long jarg2, Message jarg2_);
   public final static native long IAndroidActivity_getTaskScheduler(long jarg1, IAndroidActivity jarg1_);
   public final static native long new_IAndroidActivity();
@@ -61,12 +86,11 @@ public class SwigAndroidGuideJNI {
   public final static native void ITaskScheduler_director_connect(ITaskScheduler obj, long cptr, boolean mem_own, boolean weak_global);
   public final static native void ITaskScheduler_change_ownership(ITaskScheduler obj, long cptr, boolean take_or_release);
   public final static native long PhotoMessage_SWIGSmartPtrUpcast(long jarg1);
-  public final static native long VideoMessage_SWIGSmartPtrUpcast(long jarg1);
 
   public static void SwigDirector_FunctorVoidImpl_call(FunctorVoidImpl jself) {
     jself.call();
   }
-  public static void SwigDirector_IAndroidActivity_showToast(IAndroidActivity jself, java.lang.String text) {
+  public static void SwigDirector_IAndroidActivity_showToast(IAndroidActivity jself, String text) {
     jself.showToast(text);
   }
   public static void SwigDirector_IAndroidActivity_sendMessage(IAndroidActivity jself, long message) {

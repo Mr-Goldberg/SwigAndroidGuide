@@ -8,22 +8,19 @@ namespace SwigAndroidGuide
     class Message
     {
     public:
-
-        Message(int id, std::shared_ptr<std::string> text);
-
         virtual ~Message() = default;
 
-        int getId();
+        int getId() { return _id; }
 
-        void setId(int id);
+        void setId(int id) { _id = id; }
 
-        std::shared_ptr<std::string> getText();
+        std::shared_ptr<std::string> getText() { return _text; }
 
-        void setText(const std::shared_ptr<std::string> text);
+        void setText(std::shared_ptr<std::string> text) { _text = text; }
 
     private:
 
         int _id;
-        std::shared_ptr<std::string> text;
+        std::shared_ptr<std::string> _text;
     };
 }

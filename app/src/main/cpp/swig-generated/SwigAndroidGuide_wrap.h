@@ -32,7 +32,7 @@ public:
     void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
     SwigDirector_IAndroidActivity(JNIEnv *jenv);
     virtual ~SwigDirector_IAndroidActivity();
-    virtual void showToast(std::shared_ptr< std::string > text);
+    virtual void showToast(std::string text);
     virtual void sendMessage(std::shared_ptr< SwigAndroidGuide::Message > message);
     virtual SwigAndroidGuide::ITaskScheduler *getTaskScheduler();
 public:

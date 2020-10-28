@@ -51,7 +51,7 @@ public class IAndroidActivity {
     SwigAndroidGuideJNI.IAndroidActivity_change_ownership(this, swigCPtr, true);
   }
 
-  public void showToast(java.lang.String text) {
+  public void showToast(String text) {
     SwigAndroidGuideJNI.IAndroidActivity_showToast(swigCPtr, this, text);
   }
 

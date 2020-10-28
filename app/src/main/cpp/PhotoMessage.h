@@ -8,20 +8,12 @@ namespace SwigAndroidGuide
     class PhotoMessage : public Message
     {
     public:
-        PhotoMessage(int id, std::shared_ptr <std::string> text) : Message(id, text) {}
+        std::vector<byte> getPhotoData() { return _photoData; }
 
-        std::shared_ptr <std::vector<byte>> getPhotoData()
-        {
-            return photoData;
-        }
-
-        void setPhotoData(std::shared_ptr <std::vector<byte>> photoData)
-        {
-            this->photoData = photoData;
-        }
+        void setPhotoData(std::vector<byte> photoData) { _photoData = photoData; }
 
     private:
 
-        std::shared_ptr<std::vector<byte>> photoData;
+        std::vector<byte> _photoData;
     };
 }
