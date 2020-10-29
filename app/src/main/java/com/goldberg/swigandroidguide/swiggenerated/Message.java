@@ -56,6 +56,14 @@ public class Message {
     SwigAndroidGuideJNI.Message_setText(swigCPtr, this, text);
   }
 
+  public java.util.Date getCreationDate() {
+	return new java.util.Date(SwigAndroidGuideJNI.Message_getCreationDate(swigCPtr, this) * 1000);
+}
+
+  public void setCreationDate(java.util.Date creationDate) {
+    SwigAndroidGuideJNI.Message_setCreationDate(swigCPtr, this, creationDate.getTime() / 1000);
+  }
+
   public Message() {
     this(SwigAndroidGuideJNI.new_Message(), true);
   }

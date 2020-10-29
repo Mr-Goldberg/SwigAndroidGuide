@@ -16,6 +16,7 @@
 %include "std_shared_ptr_to_string.i"
 %include "std_shared_ptr_to_vector_of_bytes.i"
 %include "std_shared_ptr_to_vector_of_shared_ptr_to_vector_of_bytes.i"
+%include "time_t.i"
 
 %template(VectorByte) std::vector<byte>;
 %template(VectorVectorByte) std::vector<std::vector<byte>>;
@@ -24,7 +25,7 @@
 
 %dynamic_cast_extension(SwigAndroidGuide, PhotoMessage, Message)
 
-// %{...%} In included into generated *.cpp file literally, without processing.
+// %{...%} Is included into the generated *.cpp file literally, without processing.
 // Generated file is simple C++ file, so needed to include all required headers there too.
 
 %{

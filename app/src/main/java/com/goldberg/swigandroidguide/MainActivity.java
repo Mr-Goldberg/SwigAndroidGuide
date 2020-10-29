@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
                 return;
             }
 
-            Log.d(TAG, String.format(Locale.US, "Message sent: '%d %s'", message.getId(), message.getText()));
+            Log.d(TAG, String.format(Locale.US, "Message sent: '%d %s %s'", message.getId(), message.getText(), message.getCreationDate()));
         }
 
         @Override

@@ -36,9 +36,9 @@ namespace SwigAndroidGuide
             photoMessage->setText(make_shared<string>("PhotoMessage!"));
 
             vector<byte> photoData;
-            photoData.push_back((byte)78);
-            photoData.push_back((byte)64);
-            photoData.push_back((byte)35);
+            photoData.push_back((byte) 78);
+            photoData.push_back((byte) 64);
+            photoData.push_back((byte) 35);
             photoMessage->setPhotoData(photoData);
 
             androidActivity->sendMessage(photoMessage);
@@ -52,6 +52,10 @@ namespace SwigAndroidGuide
         shared_ptr<Message> message = make_shared<Message>();
         message->setId(22);
         message->setText(make_shared<string>("Greetings!"));
+        time_t now = time(nullptr);
+        __android_log_print(ANDROID_LOG_DEBUG, TAG, "%s", asctime(localtime(&now)));
+        message->setCreationDate(now);
+
         androidActivity->sendMessage(message);
         sendPhotoMessage(androidActivity);
         doAsyncTasks(androidActivity);

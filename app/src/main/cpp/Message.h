@@ -18,9 +18,14 @@ namespace SwigAndroidGuide
 
         void setText(std::shared_ptr<std::string> text) { _text = text; }
 
+        time_t getCreationDate() const { return _creationDate; }
+
+        void setCreationDate(time_t creationDate) { _creationDate = creationDate; }
+
     private:
 
         int _id;
         std::shared_ptr<std::string> _text;
+        time_t _creationDate;
     };
 }

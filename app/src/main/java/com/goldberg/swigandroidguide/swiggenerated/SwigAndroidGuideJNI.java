@@ -58,6 +58,8 @@ public class SwigAndroidGuideJNI {
   public final static native void Message_setId(long jarg1, Message jarg1_, int jarg2);
   public final static native java.lang.String Message_getText(long jarg1, Message jarg1_);
   public final static native void Message_setText(long jarg1, Message jarg1_, java.lang.String jarg2);
+  public final static native long Message_getCreationDate(long jarg1, Message jarg1_);
+  public final static native void Message_setCreationDate(long jarg1, Message jarg1_, long jarg2);
   public final static native long new_Message();
   public final static native long PhotoMessage_getPhotoData(long jarg1, PhotoMessage jarg1_);
   public final static native void PhotoMessage_setPhotoData(long jarg1, PhotoMessage jarg1_, long jarg2, VectorByte jarg2_);

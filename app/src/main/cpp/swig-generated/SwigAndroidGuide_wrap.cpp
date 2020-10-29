@@ -2239,6 +2239,40 @@ SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAnd
 }
 
 
+SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1getCreationDate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  std::shared_ptr< SwigAndroidGuide::Message const > *smartarg1 = 0 ;
+  time_t result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr< const SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  result = ((SwigAndroidGuide::Message const *)arg1)->getCreationDate();
+  jresult = result;
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_Message_1setCreationDate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+  SwigAndroidGuide::Message *arg1 = (SwigAndroidGuide::Message *) 0 ;
+  time_t arg2 ;
+  std::shared_ptr< SwigAndroidGuide::Message > *smartarg1 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  
+  smartarg1 = *(std::shared_ptr<  SwigAndroidGuide::Message > **)&jarg1;
+  arg1 = (SwigAndroidGuide::Message *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = jarg2;
+  (arg1)->setCreationDate(arg2);
+}
+
+
 SWIGEXPORT jlong JNICALL Java_com_goldberg_swigandroidguide_swiggenerated_SwigAndroidGuideJNI_new_1Message(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   SwigAndroidGuide::Message *result = 0 ;
