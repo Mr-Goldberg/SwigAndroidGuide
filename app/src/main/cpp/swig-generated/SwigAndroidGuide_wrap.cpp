@@ -777,6 +777,8 @@ namespace
 {
 	std::shared_ptr<std::string> convertStringFromJavaToCpp(JNIEnv *jenv, jstring javaString)
 	{
+		if (!javaString) return nullptr;
+		
 		const char * psz_string = jenv->GetStringUTFChars(javaString, NULL);
 		if (!psz_string)
 		{
