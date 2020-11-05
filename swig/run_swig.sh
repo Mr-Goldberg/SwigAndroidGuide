@@ -36,4 +36,4 @@ mkdir -p ${generated_java_dir}
 # '-o' - location of generated C++/JNI file.
 # '-outdir' - location of generated Java code directory.
 # 'SaveAndSpend.i' - script input file.
-swig -I${android_src_dir} -I../../SharedSrc -c++ -java -package com.goldberg.swigandroidguide.swiggenerated -o ${generated_cpp_file} -outdir ${generated_java_dir} SwigAndroidGuide.i
+swig -I${android_src_dir} -c++ -java -package com.goldberg.swigandroidguide.swiggenerated -o ${generated_cpp_file} -outdir ${generated_java_dir} SwigAndroidGuide.i
