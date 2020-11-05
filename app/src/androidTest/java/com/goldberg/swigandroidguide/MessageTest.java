@@ -26,7 +26,7 @@ public class MessageTest
         Message message = new Message();
         message.setText(null);
         assertThat(message.getText()).isNull();
-        message.setText("Have nice day");
-        assertThat(message.getText()).isEqualTo("Have nice day");
+        message.setText("Have a nice day");
+        assertThat(message.getText()).isEqualTo("Have a nice day");
     }
 }
